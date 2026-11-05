@@ -35,6 +35,8 @@ pub enum StandardFrameType {
     TurnStateChanged,
     /// Tool invocation started.
     ToolCallStarted,
+    /// Incremental tool output.
+    ToolOutputDelta,
     /// Tool invocation finished.
     ToolCallFinished,
     /// Detached job started.
@@ -51,16 +53,24 @@ pub enum StandardFrameType {
     SessionDetach,
     /// Client session close.
     SessionClose,
+    /// Server confirmation that a session closed.
+    SessionClosed,
     /// Client job cancellation.
     CancelJob,
     /// Tool approval response.
     ToolApprovalResponse,
     /// Job listing request.
     JobList,
+    /// Job listing response.
+    JobListResult,
+    /// Detached job state.
+    JobState,
     /// Job lookup request.
     JobGet,
     /// History page request.
     HistoryGet,
+    /// History page response.
+    HistoryPage,
     /// Session fork request.
     SessionFork,
     /// Session rewind request.
