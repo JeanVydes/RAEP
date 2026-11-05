@@ -1,0 +1,827 @@
+{
+ "frames": [
+  {
+   "id": "V-001",
+   "description": "Connection-level HELLO without seq",
+   "valid": true,
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V001",
+    "ref": null,
+    "session_id": "",
+    "turn_id": null,
+    "job_id": null,
+    "timestamp": 1793404900000,
+    "type": "HELLO",
+    "payload": {
+     "server_version": "example-server 1.0.0",
+     "wire_versions": [
+      "1.0"
+     ],
+     "capabilities": [
+      "transport.ws",
+      "jobs"
+     ],
+     "limits": {
+      "max_frame_bytes": 1048576
+     }
+    }
+   }
+  },
+  {
+   "id": "V-002",
+   "description": "SESSION_ATTACH asking the server to allocate the id",
+   "valid": true,
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V002",
+    "ref": null,
+    "session_id": "",
+    "turn_id": null,
+    "job_id": null,
+    "timestamp": 1793404900000,
+    "type": "SESSION_ATTACH",
+    "payload": {
+     "agent_id": "example-agent",
+     "mode": "controller",
+     "resume_from_seq": 0
+    }
+   }
+  },
+  {
+   "id": "V-003",
+   "description": "USER_INPUT with an uploaded image",
+   "valid": true,
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V003",
+    "ref": null,
+    "session_id": "sess_88392",
+    "turn_id": "turn_1",
+    "job_id": null,
+    "timestamp": 1793404900000,
+    "type": "USER_INPUT",
+    "payload": {
+     "content": [
+      {
+       "type": "text",
+       "text": "What is wrong here?"
+      },
+      {
+       "type": "image",
+       "source": {
+        "kind": "upload",
+        "upload_id": "upl_7f3a"
+       },
+       "mime_type": "image/png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "V-004",
+   "description": "TOKEN_DELTA on the reasoning channel",
+   "valid": true,
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V004",
+    "seq": 5,
+    "ref": null,
+    "session_id": "sess_88392",
+    "turn_id": "turn_1",
+    "job_id": null,
+    "timestamp": 1793404900000,
+    "type": "TOKEN_DELTA",
+    "payload": {
+     "delta": "Checking the log",
+     "index": 0,
+     "channel": "reasoning",
+     "kind": "summary"
+    }
+   }
+  },
+  {
+   "id": "V-005",
+   "description": "JOB_FINISHED for a process killed by a signal",
+   "valid": true,
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V005",
+    "seq": 9,
+    "ref": null,
+    "session_id": "sess_88392",
+    "turn_id": null,
+    "job_id": "job_1",
+    "timestamp": 1793404900000,
+    "type": "JOB_FINISHED",
+    "payload": {
+     "status": "KILLED",
+     "exit_code": null,
+     "signal": "SIGTERM",
+     "summary": "terminated by user",
+     "triggered_new_turn": false
+    }
+   }
+  },
+  {
+   "id": "V-006",
+   "description": "TOOL_CALL_STARTED for a client tool",
+   "valid": true,
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V006",
+    "seq": 6,
+    "ref": null,
+    "session_id": "sess_88392",
+    "turn_id": "turn_1",
+    "job_id": null,
+    "timestamp": 1793404900000,
+    "type": "TOOL_CALL_STARTED",
+    "payload": {
+     "tool_call_id": "call_1",
+     "tool_name": "read_file",
+     "arguments": {
+      "path": "a.txt"
+     },
+     "requires_approval": false,
+     "executor": "client",
+     "attempt": 1
+    }
+   }
+  },
+  {
+   "id": "V-007",
+   "description": "TOOL_APPROVAL_RESPONSE answering by approval id",
+   "valid": true,
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V007",
+    "ref": null,
+    "session_id": "sess_88392",
+    "turn_id": null,
+    "job_id": null,
+    "timestamp": 1793404900000,
+    "type": "TOOL_APPROVAL_RESPONSE",
+    "payload": {
+     "approval_id": "apr_1",
+     "decision": "approve"
+    }
+   }
+  },
+  {
+   "id": "V-101",
+   "description": "USER_INPUT with both prompt and content",
+   "valid": false,
+   "reason": "exactly one of prompt and content",
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V101",
+    "ref": null,
+    "session_id": "sess_88392",
+    "turn_id": "turn_1",
+    "job_id": null,
+    "timestamp": 1793404900000,
+    "type": "USER_INPUT",
+    "payload": {
+     "prompt": "hi",
+     "content": [
+      {
+       "type": "text",
+       "text": "hi"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "V-102",
+   "description": "USER_INPUT with neither prompt nor content",
+   "valid": false,
+   "reason": "exactly one of prompt and content",
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V102",
+    "ref": null,
+    "session_id": "sess_88392",
+    "turn_id": "turn_1",
+    "job_id": null,
+    "timestamp": 1793404900000,
+    "type": "USER_INPUT",
+    "payload": {
+     "queue_policy": "queue"
+    }
+   }
+  },
+  {
+   "id": "V-103",
+   "description": "TOKEN_DELTA without index",
+   "valid": false,
+   "reason": "index is required",
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V103",
+    "seq": 5,
+    "ref": null,
+    "session_id": "sess_88392",
+    "turn_id": "turn_1",
+    "job_id": null,
+    "timestamp": 1793404900000,
+    "type": "TOKEN_DELTA",
+    "payload": {
+     "delta": "x"
+    }
+   }
+  },
+  {
+   "id": "V-104",
+   "description": "JOB_STARTED with detached false",
+   "valid": false,
+   "reason": "detached is always true",
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V104",
+    "seq": 7,
+    "ref": null,
+    "session_id": "sess_88392",
+    "turn_id": null,
+    "job_id": "job_1",
+    "timestamp": 1793404900000,
+    "type": "JOB_STARTED",
+    "payload": {
+     "job_id": "job_1",
+     "tool_call_id": "call_1",
+     "command": "make",
+     "detached": false
+    }
+   }
+  },
+  {
+   "id": "V-105",
+   "description": "A url source over plain HTTP",
+   "valid": false,
+   "reason": "url sources are HTTPS only",
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V105",
+    "ref": null,
+    "session_id": "sess_88392",
+    "turn_id": "turn_1",
+    "job_id": null,
+    "timestamp": 1793404900000,
+    "type": "USER_INPUT",
+    "payload": {
+     "content": [
+      {
+       "type": "image",
+       "source": {
+        "kind": "url",
+        "url": "http://example.com/a.png"
+       },
+       "mime_type": "image/png"
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "V-106",
+   "description": "Envelope with an unknown top-level property",
+   "valid": false,
+   "reason": "the envelope allows only its defined fields and ext",
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V106",
+    "ref": null,
+    "session_id": "sess_88392",
+    "turn_id": null,
+    "job_id": null,
+    "timestamp": 1793404900000,
+    "type": "ACK",
+    "payload": {
+     "last_seq": 3
+    },
+    "extra": true
+   }
+  },
+  {
+   "id": "V-107",
+   "description": "Envelope without session_id",
+   "valid": false,
+   "reason": "session_id is required",
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V107",
+    "ref": null,
+    "turn_id": null,
+    "job_id": null,
+    "timestamp": 1793404900000,
+    "type": "ACK",
+    "payload": {
+     "last_seq": 3
+    }
+   }
+  },
+  {
+   "id": "V-108",
+   "description": "TOOL_APPROVAL_RESPONSE with neither tool_call_id nor approval_id",
+   "valid": false,
+   "reason": "tool_call_id or approval_id is required",
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V108",
+    "ref": null,
+    "session_id": "sess_88392",
+    "turn_id": null,
+    "job_id": null,
+    "timestamp": 1793404900000,
+    "type": "TOOL_APPROVAL_RESPONSE",
+    "payload": {
+     "decision": "deny"
+    }
+   }
+  },
+  {
+   "id": "V-109",
+   "description": "INPUT_STREAM_DATA with a negative index",
+   "valid": false,
+   "reason": "index starts at 0",
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V109",
+    "ref": null,
+    "session_id": "sess_88392",
+    "turn_id": null,
+    "job_id": null,
+    "timestamp": 1793404900000,
+    "type": "INPUT_STREAM_DATA",
+    "payload": {
+     "stream_id": "s1",
+     "index": -1,
+     "data": "AAAA"
+    }
+   }
+  },
+  {
+   "id": "V-110",
+   "description": "SESSION_REWIND without to_turn_id",
+   "valid": false,
+   "reason": "to_turn_id is required",
+   "frame": {
+    "version": "1.0",
+    "id": "01JB00000000000000000V110",
+    "ref": null,
+    "session_id": "sess_88392",
+    "turn_id": null,
+    "job_id": null,
+    "timestamp": 1793404900000,
+    "type": "SESSION_REWIND",
+    "payload": {
+     "inclusive": true
+    }
+   }
+  }
+ ],
+ "scenarios": [
+  {
+   "id": "C-013",
+   "title": "Cancel after the turn finished returns TURN_NOT_ACTIVE",
+   "profile": "Core",
+   "requires": [],
+   "setup": {
+    "agent": {
+     "id": "test-agent",
+     "tools": {
+      "builtin": [
+       "echo"
+      ]
+     }
+    },
+    "provider_script": [
+     {
+      "output": "done"
+     }
+    ]
+   },
+   "steps": [
+    {
+     "send": {
+      "type": "SESSION_ATTACH",
+      "session_id": "",
+      "payload": {
+       "agent_id": "test-agent"
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "HELLO"
+     }
+    },
+    {
+     "expect": {
+      "type": "SESSION_ATTACHED",
+      "payload": {
+       "created": true
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "SESSION_STATE"
+     }
+    },
+    {
+     "send": {
+      "type": "USER_INPUT",
+      "turn_id": "t1",
+      "payload": {
+       "prompt": "hi"
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "TURN_STATE_CHANGED",
+      "payload": {
+       "state": "COMPLETED"
+      },
+      "envelope": {
+       "turn_id": "t1"
+      }
+     }
+    },
+    {
+     "send": {
+      "type": "CANCEL_TURN",
+      "turn_id": "t1",
+      "payload": {}
+     }
+    },
+    {
+     "expect": {
+      "type": "ERROR",
+      "payload": {
+       "code": "TURN_NOT_ACTIVE"
+      }
+     }
+    },
+    {
+     "expect_none": {
+      "type": "TURN_STATE_CHANGED",
+      "within_ms": 500
+     }
+    }
+   ]
+  },
+  {
+   "id": "C-041",
+   "title": "Resume replays exactly the missed events",
+   "profile": "Resilient",
+   "requires": [
+    "resume"
+   ],
+   "setup": {
+    "agent": {
+     "id": "test-agent",
+     "tools": {
+      "builtin": [
+       "echo"
+      ]
+     }
+    },
+    "provider_script": [
+     {
+      "output": "one two three"
+     }
+    ]
+   },
+   "steps": [
+    {
+     "send": {
+      "type": "SESSION_ATTACH",
+      "session_id": "",
+      "payload": {
+       "agent_id": "test-agent"
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "SESSION_ATTACHED",
+      "envelope": {
+       "seq": {
+        "$capture": "attached_seq"
+       }
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "SESSION_STATE"
+     }
+    },
+    {
+     "send": {
+      "type": "USER_INPUT",
+      "turn_id": "t1",
+      "payload": {
+       "prompt": "go"
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "TOKEN_DELTA",
+      "envelope": {
+       "seq": {
+        "$capture": "last_seen"
+       }
+      }
+     }
+    },
+    {
+     "action": {
+      "name": "disconnect"
+     }
+    },
+    {
+     "action": {
+      "name": "reconnect"
+     }
+    },
+    {
+     "send": {
+      "type": "SESSION_ATTACH",
+      "payload": {
+       "agent_id": "test-agent",
+       "resume_from_seq": {
+        "$use": "last_seen"
+       }
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "SESSION_ATTACHED",
+      "payload": {
+       "replay": {
+        "truncated": false
+       }
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "TURN_STATE_CHANGED",
+      "payload": {
+       "state": "COMPLETED"
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "C-043",
+   "title": "Crash: lost range, interrupted turn, interrupted tool call",
+   "profile": "Resilient",
+   "requires": [
+    "resume",
+    "jobs"
+   ],
+   "setup": {
+    "agent": {
+     "id": "test-agent",
+     "tools": {
+      "builtin": [
+       "echo"
+      ]
+     }
+    },
+    "provider_script": [
+     {
+      "tool_call": {
+       "name": "echo",
+       "arguments": {
+        "text": "x"
+       },
+       "hang": true
+      }
+     }
+    ]
+   },
+   "steps": [
+    {
+     "send": {
+      "type": "SESSION_ATTACH",
+      "session_id": "",
+      "payload": {
+       "agent_id": "test-agent"
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "SESSION_ATTACHED"
+     }
+    },
+    {
+     "expect": {
+      "type": "SESSION_STATE"
+     }
+    },
+    {
+     "send": {
+      "type": "USER_INPUT",
+      "turn_id": "t1",
+      "payload": {
+       "prompt": "go"
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "TOOL_CALL_STARTED",
+      "payload": {
+       "tool_name": "echo"
+      }
+     }
+    },
+    {
+     "action": {
+      "name": "crash_server"
+     }
+    },
+    {
+     "action": {
+      "name": "reconnect"
+     }
+    },
+    {
+     "send": {
+      "type": "SESSION_ATTACH",
+      "payload": {
+       "agent_id": "test-agent",
+       "resume_from_seq": 3
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "SESSION_ATTACHED",
+      "payload": {
+       "replay": {
+        "lost": {
+         "from_seq": {
+          "$exists": true
+         }
+        }
+       }
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "TOOL_CALL_FINISHED",
+      "payload": {
+       "status": "ERROR",
+       "result_summary": "interrupted"
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "TURN_STATE_CHANGED",
+      "payload": {
+       "state": "FAILED",
+       "error": {
+        "code": "INTERNAL",
+        "details": {
+         "reason": "interrupted"
+        }
+       }
+      }
+     }
+    }
+   ]
+  },
+  {
+   "id": "C-130",
+   "title": "Client-side tool: request, result, finish",
+   "profile": "Client tools",
+   "requires": [
+    "client_tools"
+   ],
+   "setup": {
+    "agent": {
+     "id": "test-agent",
+     "tools": {
+      "client": true
+     }
+    },
+    "provider_script": [
+     {
+      "tool_call": {
+       "name": "read_file",
+       "arguments": {
+        "path": "a.txt"
+       }
+      }
+     },
+     {
+      "output": "ok"
+     }
+    ]
+   },
+   "steps": [
+    {
+     "send": {
+      "type": "SESSION_ATTACH",
+      "session_id": "",
+      "payload": {
+       "agent_id": "test-agent",
+       "capabilities": {
+        "client_tools": [
+         {
+          "name": "read_file",
+          "input_schema": {
+           "type": "object"
+          },
+          "executor": "client"
+         }
+        ]
+       }
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "SESSION_ATTACHED"
+     }
+    },
+    {
+     "expect": {
+      "type": "SESSION_STATE"
+     }
+    },
+    {
+     "send": {
+      "type": "USER_INPUT",
+      "turn_id": "t1",
+      "payload": {
+       "prompt": "read it"
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "TOOL_CALL_STARTED",
+      "payload": {
+       "executor": "client"
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "CLIENT_TOOL_REQUEST",
+      "payload": {
+       "tool_name": "read_file",
+       "tool_call_id": {
+        "$capture": "call"
+       }
+      }
+     }
+    },
+    {
+     "send": {
+      "type": "CLIENT_TOOL_RESULT",
+      "turn_id": "t1",
+      "payload": {
+       "tool_call_id": {
+        "$use": "call"
+       },
+       "status": "OK",
+       "content": "hello"
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "TOOL_CALL_FINISHED",
+      "payload": {
+       "status": "OK"
+      }
+     }
+    },
+    {
+     "expect": {
+      "type": "TURN_STATE_CHANGED",
+      "payload": {
+       "state": "COMPLETED"
+      }
+     }
+    }
+   ]
+  }
+ ]
+}

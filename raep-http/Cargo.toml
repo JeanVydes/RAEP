@@ -1,0 +1,18 @@
+[package]
+name = "raep-http"
+description = "Axum HTTP bindings for the RAEP WebSocket and SSE transports."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+axum = { version = "0.8", features = ["ws"] }
+futures-util = "0.3"
+raep-server = { path = "../raep-server" }
+raep-domain = { path = "../raep-domain" }
+raep-ports = { path = "../raep-ports" }
+raep-types = { path = "../raep-types" }
+serde_json.workspace = true
+serde.workspace = true
+tokio = { version = "1", features = ["sync"] }

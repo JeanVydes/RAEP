@@ -1,0 +1,5 @@
+title: RAEP — Remote Agent Execution Protocol
+description: A vendor-neutral, event-driven protocol for remote agent execution.
+url: https://raep.vyde.dev
+baseurl: ""
+markdown: kramdown

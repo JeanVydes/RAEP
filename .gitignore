@@ -1,0 +1,9 @@
+/target
+*.db
+*.db-*
+.env
+.venv
+__pycache__
+.DS_Store
+.idea
+.vscode

@@ -1,0 +1,17 @@
+[package]
+name = "raep-conformance"
+description = "RFC vector loading and structural conformance checks for RAEP."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+serde_json.workspace = true
+raep-types = { path = "../raep-types" }
+jsonschema = { version = "0.18", features = ["draft202012"] }
+url = "2"
+anyhow = "1"
+
+[dev-dependencies]
+serde_json.workspace = true

@@ -1,0 +1,15 @@
+[package]
+name = "raep-transport"
+description = "Runtime-independent WebSocket and SSE protocol bindings for RAEP."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+raep-types = { path = "../raep-types" }
+serde_json.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true

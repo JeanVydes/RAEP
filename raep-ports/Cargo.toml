@@ -1,0 +1,16 @@
+[package]
+name = "raep-ports"
+description = "Hexagonal ports for RAEP application services and adapters."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+raep-domain = { path = "../raep-domain" }
+raep-types = { path = "../raep-types" }
+serde_json.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+futures-lite = "2"

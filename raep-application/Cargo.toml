@@ -1,0 +1,16 @@
+[package]
+name = "raep-application"
+description = "Use cases for assembling RAEP server behavior."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+raep-domain = { path = "../raep-domain" }
+raep-ports = { path = "../raep-ports" }
+raep-types = { path = "../raep-types" }
+thiserror.workspace = true
+
+[dev-dependencies]
+raep-memory = { path = "../raep-memory" }

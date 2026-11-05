@@ -1,0 +1,6516 @@
+[
+ {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raep.vyde.dev/v1/envelope.json",
+  "type": "object",
+  "properties": {
+   "version": {
+    "const": "1.0"
+   },
+   "id": {
+    "type": "string",
+    "minLength": 1,
+    "maxLength": 128
+   },
+   "seq": {
+    "type": "integer",
+    "minimum": 1
+   },
+   "ref": {
+    "type": [
+     "string",
+     "null"
+    ]
+   },
+   "session_id": {
+    "type": "string"
+   },
+   "turn_id": {
+    "type": [
+     "string",
+     "null"
+    ]
+   },
+   "job_id": {
+    "type": [
+     "string",
+     "null"
+    ]
+   },
+   "timestamp": {
+    "type": "integer"
+   },
+   "type": {
+    "type": "string"
+   },
+   "payload": {
+    "type": "object"
+   },
+   "ext": {
+    "type": "object"
+   }
+  },
+  "required": [
+   "version",
+   "id",
+   "session_id",
+   "timestamp",
+   "type",
+   "payload"
+  ],
+  "additionalProperties": false
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/usage.json",
+  "type": "object",
+  "properties": {
+   "input_tokens": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "output_tokens": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "cached_tokens": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "reasoning_tokens": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "tool_calls": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "duration_ms": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "cost": {
+    "type": "object",
+    "properties": {
+     "amount": {
+      "type": "number",
+      "minimum": 0
+     },
+     "currency": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "amount",
+     "currency"
+    ]
+   },
+   "extra": {
+    "type": "object"
+   }
+  }
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/error_payload.json",
+  "type": "object",
+  "properties": {
+   "code": {
+    "type": "string"
+   },
+   "message": {
+    "type": "string"
+   },
+   "retryable": {
+    "type": "boolean"
+   },
+   "details": {
+    "type": "object"
+   },
+   "retry_after_ms": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "code",
+   "message",
+   "retryable"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/budget_map.json",
+  "type": "object",
+  "additionalProperties": {
+   "type": "number",
+   "minimum": 0
+  }
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/agent_ref.json",
+  "type": "object",
+  "properties": {
+   "id": {
+    "type": "string"
+   },
+   "version": {
+    "type": "string"
+   }
+  },
+  "required": [
+   "id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/agent_summary.json",
+  "type": "object",
+  "properties": {
+   "id": {
+    "type": "string"
+   },
+   "version": {
+    "type": "string"
+   },
+   "provider": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     }
+    }
+   },
+   "model": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     }
+    }
+   },
+   "sampling": {
+    "type": "object"
+   },
+   "reasoning": {
+    "type": "object"
+   },
+   "budgets": {
+    "type": "object"
+   },
+   "delegation": {
+    "type": "object"
+   },
+   "tools": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "scopes": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "capabilities": {
+    "type": "object"
+   },
+   "handoff_targets": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   }
+  },
+  "required": [
+   "id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/origin.json",
+  "type": "object",
+  "properties": {
+   "kind": {
+    "type": "string",
+    "enum": [
+     "user",
+     "delegator",
+     "system",
+     "trigger",
+     "schedule"
+    ]
+   },
+   "session_id": {
+    "type": "string"
+   },
+   "tool_call_id": {
+    "type": "string"
+   },
+   "user_id": {
+    "type": "string"
+   },
+   "display_name": {
+    "type": "string"
+   },
+   "trigger_id": {
+    "type": "string"
+   },
+   "schedule_id": {
+    "type": "string"
+   }
+  },
+  "required": [
+   "kind"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/history_item.json",
+  "type": "object",
+  "properties": {
+   "role": {
+    "type": "string",
+    "enum": [
+     "user",
+     "assistant",
+     "system_event",
+     "tool"
+    ]
+   },
+   "content": {
+    "oneOf": [
+     {
+      "type": "string"
+     },
+     {
+      "type": "array",
+      "items": {
+       "type": "object"
+      }
+     }
+    ]
+   },
+   "turn_id": {
+    "type": "string"
+   },
+   "origin": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/origin.json"
+   },
+   "delivery": {
+    "type": "string",
+    "enum": [
+     "steer",
+     "queue",
+     "interrupt"
+    ]
+   },
+   "provenance": {
+    "type": "object"
+   },
+   "timestamp": {
+    "type": "integer"
+   },
+   "rewound": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "role",
+   "content"
+  ]
+ },
+ {
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raep.vyde.dev/v1/frame.json",
+  "allOf": [
+   {
+    "$ref": "https://raep.vyde.dev/v1/envelope.json"
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "SESSION_ATTACH"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/SESSION_ATTACH.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "SESSION_DETACH"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/SESSION_DETACH.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "SESSION_CLOSE"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/SESSION_CLOSE.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "SESSION_CONFIGURE"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/SESSION_CONFIGURE.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "SESSION_EXPORT"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/SESSION_EXPORT.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "SESSION_FORK"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/SESSION_FORK.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "SESSION_REWIND"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/SESSION_REWIND.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "SESSION_COMPACT"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/SESSION_COMPACT.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "CONTEXT_PIN"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/CONTEXT_PIN.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "USER_INPUT"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/USER_INPUT.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "INPUT_STREAM_START"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/INPUT_STREAM_START.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "INPUT_STREAM_DATA"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/INPUT_STREAM_DATA.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "INPUT_STREAM_END"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/INPUT_STREAM_END.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "CANCEL_TURN"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/CANCEL_TURN.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "CANCEL_JOB"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/CANCEL_JOB.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "TOOL_APPROVAL_RESPONSE"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/TOOL_APPROVAL_RESPONSE.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "CLIENT_TOOL_RESULT"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/CLIENT_TOOL_RESULT.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "JOB_LIST"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/JOB_LIST.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "JOB_GET"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/JOB_GET.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "HISTORY_GET"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/HISTORY_GET.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "ACK"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/ACK.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "AUTH_REFRESH"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/AUTH_REFRESH.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "DELEGATOR_CONTROL"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/DELEGATOR_CONTROL.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "PRESENCE_UPDATE"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/PRESENCE_UPDATE.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "HELLO"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/HELLO.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "SESSION_ATTACHED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/SESSION_ATTACHED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "SESSION_STATE"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/SESSION_STATE.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "SESSION_CLOSED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/SESSION_CLOSED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "SESSION_CONFIGURED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/SESSION_CONFIGURED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "SESSION_UPDATED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/SESSION_UPDATED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "SESSION_FORKED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/SESSION_FORKED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "SESSION_EXPORT_READY"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/SESSION_EXPORT_READY.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "AGENT_CHANGED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/AGENT_CHANGED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "USER_INPUT_ACCEPTED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/USER_INPUT_ACCEPTED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "TURN_STATE_CHANGED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/TURN_STATE_CHANGED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "TOKEN_DELTA"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/TOKEN_DELTA.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "PROVIDER_RETRY"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/PROVIDER_RETRY.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "TOOL_CALL_STARTED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/TOOL_CALL_STARTED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "TOOL_OUTPUT_DELTA"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/TOOL_OUTPUT_DELTA.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "TOOL_CALL_FINISHED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/TOOL_CALL_FINISHED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "TOOL_APPROVAL_REQUEST"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/TOOL_APPROVAL_REQUEST.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "APPROVAL_RESOLVED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/APPROVAL_RESOLVED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "CLIENT_TOOL_REQUEST"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/CLIENT_TOOL_REQUEST.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "JOB_STARTED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/JOB_STARTED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "JOB_PROGRESS_DELTA"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/JOB_PROGRESS_DELTA.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "JOB_FINISHED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/JOB_FINISHED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "JOB_LIST_RESULT"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/JOB_LIST_RESULT.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "JOB_STATE"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/JOB_STATE.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "HISTORY_PAGE"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/HISTORY_PAGE.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "HISTORY_REWOUND"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/HISTORY_REWOUND.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "HISTORY_COMPACTED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/HISTORY_COMPACTED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "CONTEXT_UPDATED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/CONTEXT_UPDATED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "ERROR"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/ERROR.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "AUTH_EXPIRING"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/AUTH_EXPIRING.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "AUTH_REFRESHED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/AUTH_REFRESHED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "BUDGET_WARNING"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/BUDGET_WARNING.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "QUOTA_WARNING"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/QUOTA_WARNING.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "SERVER_DRAINING"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/SERVER_DRAINING.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "PRESENCE"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/PRESENCE.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "CHILD_SESSION_STARTED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/CHILD_SESSION_STARTED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "CHILD_SESSION_UPDATED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/CHILD_SESSION_UPDATED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "DELEGATOR_STATE_CHANGED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/DELEGATOR_STATE_CHANGED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "NOTIFICATION_STATUS"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/NOTIFICATION_STATUS.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "OUTPUT_PART_STARTED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/OUTPUT_PART_STARTED.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "OUTPUT_PART_DELTA"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/OUTPUT_PART_DELTA.json"
+      }
+     }
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "OUTPUT_PART_FINISHED"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "properties": {
+      "payload": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/OUTPUT_PART_FINISHED.json"
+      }
+     }
+    }
+   }
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/source.json",
+  "type": "object",
+  "properties": {
+   "kind": {
+    "type": "string",
+    "enum": [
+     "inline",
+     "upload",
+     "url",
+     "output",
+     "stream"
+    ]
+   },
+   "data": {
+    "type": "string"
+   },
+   "upload_id": {
+    "type": "string"
+   },
+   "url": {
+    "type": "string",
+    "pattern": "^https://"
+   },
+   "output_id": {
+    "type": "string"
+   },
+   "expires_at": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "stream_id": {
+    "type": "string"
+   }
+  },
+  "required": [
+   "kind"
+  ],
+  "allOf": [
+   {
+    "if": {
+     "properties": {
+      "kind": {
+       "const": "inline"
+      }
+     },
+     "required": [
+      "kind"
+     ]
+    },
+    "then": {
+     "required": [
+      "data"
+     ]
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "kind": {
+       "const": "upload"
+      }
+     },
+     "required": [
+      "kind"
+     ]
+    },
+    "then": {
+     "required": [
+      "upload_id"
+     ]
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "kind": {
+       "const": "url"
+      }
+     },
+     "required": [
+      "kind"
+     ]
+    },
+    "then": {
+     "required": [
+      "url"
+     ]
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "kind": {
+       "const": "output"
+      }
+     },
+     "required": [
+      "kind"
+     ]
+    },
+    "then": {
+     "required": [
+      "output_id"
+     ]
+    }
+   },
+   {
+    "if": {
+     "properties": {
+      "kind": {
+       "const": "stream"
+      }
+     },
+     "required": [
+      "kind"
+     ]
+    },
+    "then": {
+     "required": [
+      "stream_id"
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/content_part.json",
+  "type": "object",
+  "properties": {
+   "type": {
+    "type": "string",
+    "enum": [
+     "text",
+     "image",
+     "document",
+     "audio",
+     "video"
+    ]
+   },
+   "text": {
+    "type": "string"
+   },
+   "source": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/source.json"
+   },
+   "mime_type": {
+    "type": "string"
+   },
+   "name": {
+    "type": "string"
+   },
+   "alt": {
+    "type": "string"
+   },
+   "detail": {
+    "type": "string",
+    "enum": [
+     "low",
+     "high",
+     "auto"
+    ]
+   },
+   "pages": {
+    "type": "string"
+   },
+   "duration_ms": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "transcript": {
+    "type": "string"
+   }
+  },
+  "required": [
+   "type"
+  ],
+  "allOf": [
+   {
+    "if": {
+     "properties": {
+      "type": {
+       "const": "text"
+      }
+     },
+     "required": [
+      "type"
+     ]
+    },
+    "then": {
+     "required": [
+      "text"
+     ]
+    },
+    "else": {
+     "required": [
+      "source",
+      "mime_type"
+     ]
+    }
+   }
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/job_summary.json",
+  "type": "object",
+  "properties": {
+   "job_id": {
+    "type": "string"
+   },
+   "command": {
+    "type": "string"
+   },
+   "status": {
+    "type": "string",
+    "enum": [
+     "RUNNING",
+     "COMPLETED",
+     "FAILED",
+     "KILLED",
+     "TIMED_OUT"
+    ]
+   },
+   "started_at": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "finished_at": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "exit_code": {
+    "type": [
+     "integer",
+     "null"
+    ]
+   },
+   "turn_id": {
+    "type": "string"
+   },
+   "tool_call_id": {
+    "type": "string"
+   }
+  },
+  "required": [
+   "job_id",
+   "status"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/SESSION_ATTACH.json",
+  "type": "object",
+  "properties": {
+   "agent_id": {
+    "type": "string",
+    "minLength": 1
+   },
+   "agent_override": {
+    "type": "object"
+   },
+   "create_if_missing": {
+    "type": "boolean"
+   },
+   "mode": {
+    "type": "string",
+    "enum": [
+     "controller",
+     "observer"
+    ]
+   },
+   "takeover": {
+    "type": "boolean"
+   },
+   "resume_from_seq": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "capabilities": {
+    "type": "object",
+    "properties": {
+     "render": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "text",
+        "image",
+        "document",
+        "audio",
+        "video"
+       ]
+      }
+     },
+     "features": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "approvals",
+        "output.parts",
+        "presence",
+        "input.stream"
+       ]
+      }
+     },
+     "client_tools": {
+      "type": "array",
+      "items": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/tool_descriptor.json"
+      }
+     }
+    }
+   },
+   "client_info": {
+    "type": "object",
+    "properties": {
+     "name": {
+      "type": "string"
+     },
+     "version": {
+      "type": "string"
+     }
+    }
+   },
+   "options": {
+    "type": "object"
+   }
+  },
+  "required": [
+   "agent_id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/SESSION_DETACH.json",
+  "type": "object",
+  "properties": {
+   "reason": {
+    "type": "string",
+    "maxLength": 256
+   }
+  }
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/SESSION_CLOSE.json",
+  "type": "object",
+  "properties": {
+   "reason": {
+    "type": "string",
+    "maxLength": 256
+   },
+   "purge": {
+    "type": "boolean"
+   }
+  }
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/USER_INPUT.json",
+  "type": "object",
+  "properties": {
+   "prompt": {
+    "type": "string",
+    "minLength": 1
+   },
+   "content": {
+    "type": "array",
+    "items": {
+     "$ref": "https://raep.vyde.dev/v1/payloads/content_part.json"
+    },
+    "minItems": 1
+   },
+   "queue_policy": {
+    "type": "string",
+    "enum": [
+     "reject",
+     "queue",
+     "interrupt"
+    ]
+   },
+   "overrides": {
+    "type": "object"
+   },
+   "output": {
+    "type": "array",
+    "items": {
+     "type": "string",
+     "enum": [
+      "text",
+      "image",
+      "document",
+      "audio",
+      "video"
+     ]
+    }
+   },
+   "metadata": {
+    "type": "object"
+   },
+   "response_format": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/response_format.json"
+   },
+   "replaces_turn_id": {
+    "type": "string"
+   }
+  },
+  "oneOf": [
+   {
+    "required": [
+     "prompt"
+    ]
+   },
+   {
+    "required": [
+     "content"
+    ]
+   }
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/CANCEL_TURN.json",
+  "type": "object",
+  "properties": {
+   "reason": {
+    "type": "string",
+    "maxLength": 256
+   }
+  }
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/CANCEL_JOB.json",
+  "type": "object",
+  "properties": {
+   "job_id": {
+    "type": "string"
+   },
+   "reason": {
+    "type": "string",
+    "maxLength": 256
+   },
+   "grace_ms": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "job_id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/TOOL_APPROVAL_RESPONSE.json",
+  "type": "object",
+  "properties": {
+   "tool_call_id": {
+    "type": "string"
+   },
+   "decision": {
+    "type": "string",
+    "enum": [
+     "approve",
+     "deny",
+     "approve_for_session"
+    ]
+   },
+   "reason": {
+    "type": "string",
+    "maxLength": 256
+   },
+   "approval_id": {
+    "type": "string"
+   }
+  },
+  "required": [
+   "decision"
+  ],
+  "anyOf": [
+   {
+    "required": [
+     "tool_call_id"
+    ]
+   },
+   {
+    "required": [
+     "approval_id"
+    ]
+   }
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/JOB_LIST.json",
+  "type": "object",
+  "properties": {
+   "status": {
+    "type": "array",
+    "items": {
+     "type": "string",
+     "enum": [
+      "RUNNING",
+      "COMPLETED",
+      "FAILED",
+      "KILLED",
+      "TIMED_OUT"
+     ]
+    }
+   },
+   "limit": {
+    "type": "integer",
+    "minimum": 1,
+    "maximum": 100
+   }
+  }
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/JOB_GET.json",
+  "type": "object",
+  "properties": {
+   "job_id": {
+    "type": "string"
+   },
+   "from_index": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "job_id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/HISTORY_GET.json",
+  "type": "object",
+  "properties": {
+   "before_turn_id": {
+    "type": "string"
+   },
+   "limit": {
+    "type": "integer",
+    "minimum": 1,
+    "maximum": 100
+   },
+   "include_rewound": {
+    "type": "boolean"
+   }
+  }
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/ACK.json",
+  "type": "object",
+  "properties": {
+   "last_seq": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "last_seq"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/SESSION_ATTACHED.json",
+  "type": "object",
+  "properties": {
+   "created": {
+    "type": "boolean"
+   },
+   "mode": {
+    "type": "string",
+    "enum": [
+     "controller",
+     "observer"
+    ]
+   },
+   "last_seq": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "replay": {
+    "type": "object",
+    "properties": {
+     "from_seq": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "to_seq": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "truncated": {
+      "type": "boolean"
+     },
+     "lost": {
+      "type": "object",
+      "properties": {
+       "from_seq": {
+        "type": "integer",
+        "minimum": 0
+       },
+       "to_seq": {
+        "type": "integer",
+        "minimum": 0
+       }
+      },
+      "required": [
+       "from_seq",
+       "to_seq"
+      ]
+     }
+    }
+   },
+   "negotiated_capabilities": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "agent": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/agent_summary.json"
+   }
+  },
+  "required": [
+   "created",
+   "mode",
+   "last_seq"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/SESSION_CLOSED.json",
+  "type": "object",
+  "properties": {
+   "reason": {
+    "type": "string",
+    "enum": [
+     "client",
+     "ttl",
+     "retention",
+     "admin",
+     "parent_closed"
+    ]
+   }
+  }
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/TURN_STATE_CHANGED.json",
+  "type": "object",
+  "properties": {
+   "state": {
+    "type": "string",
+    "enum": [
+     "QUEUED",
+     "CALLING_PROVIDER",
+     "EXECUTING_TOOL",
+     "AWAITING_APPROVAL",
+     "COMPLETED",
+     "CANCELLED",
+     "FAILED"
+    ]
+   },
+   "stop_reason": {
+    "type": "string",
+    "enum": [
+     "end_turn",
+     "max_tokens",
+     "cancelled",
+     "error",
+     "tool_limit",
+     "budget_exceeded"
+    ]
+   },
+   "usage": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/usage.json"
+   },
+   "usage_rollup": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/usage.json"
+   },
+   "error": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/error_payload.json"
+   },
+   "output": {},
+   "output_schema_valid": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "state"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/TOKEN_DELTA.json",
+  "type": "object",
+  "properties": {
+   "delta": {
+    "type": "string"
+   },
+   "index": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "channel": {
+    "type": "string",
+    "enum": [
+     "text",
+     "reasoning"
+    ]
+   },
+   "kind": {
+    "type": "string",
+    "enum": [
+     "summary",
+     "raw",
+     "redacted"
+    ]
+   }
+  },
+  "required": [
+   "delta",
+   "index"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/TOOL_CALL_STARTED.json",
+  "type": "object",
+  "properties": {
+   "tool_call_id": {
+    "type": "string"
+   },
+   "tool_name": {
+    "type": "string"
+   },
+   "arguments": {
+    "type": "object"
+   },
+   "requires_approval": {
+    "type": "boolean"
+   },
+   "executor": {
+    "type": "string",
+    "enum": [
+     "server",
+     "client"
+    ]
+   },
+   "attempt": {
+    "type": "integer",
+    "minimum": 1
+   },
+   "timeout_s": {
+    "type": "integer",
+    "minimum": 1
+   }
+  },
+  "required": [
+   "tool_call_id",
+   "tool_name",
+   "arguments",
+   "requires_approval"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/TOOL_OUTPUT_DELTA.json",
+  "type": "object",
+  "properties": {
+   "tool_call_id": {
+    "type": "string"
+   },
+   "tool_name": {
+    "type": "string"
+   },
+   "stream": {
+    "type": "string",
+    "enum": [
+     "stdout",
+     "stderr"
+    ]
+   },
+   "delta": {
+    "type": "string"
+   },
+   "index": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "tool_call_id",
+   "tool_name",
+   "stream",
+   "delta",
+   "index"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/TOOL_CALL_FINISHED.json",
+  "type": "object",
+  "properties": {
+   "tool_call_id": {
+    "type": "string"
+   },
+   "status": {
+    "type": "string",
+    "enum": [
+     "OK",
+     "ERROR",
+     "DENIED",
+     "CANCELLED",
+     "TIMED_OUT"
+    ]
+   },
+   "exit_code": {
+    "type": [
+     "integer",
+     "null"
+    ]
+   },
+   "duration_ms": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "result_summary": {
+    "type": "string"
+   },
+   "attempts": {
+    "type": "integer",
+    "minimum": 1
+   },
+   "result_truncated": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "tool_call_id",
+   "status"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/TOOL_APPROVAL_REQUEST.json",
+  "type": "object",
+  "properties": {
+   "tool_call_id": {
+    "type": "string"
+   },
+   "tool_name": {
+    "type": "string"
+   },
+   "arguments": {
+    "type": "object"
+   },
+   "risk": {
+    "type": "string",
+    "enum": [
+     "low",
+     "medium",
+     "high"
+    ]
+   },
+   "expires_at": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "approval_id": {
+    "type": "string"
+   },
+   "approvers": {
+    "type": "object",
+    "properties": {
+     "kind": {
+      "type": "string",
+      "enum": [
+       "controller",
+       "group",
+       "user"
+      ]
+     },
+     "group_id": {
+      "type": "string"
+     },
+     "quorum": {
+      "type": "integer",
+      "minimum": 1
+     },
+     "eligible": {
+      "type": "integer",
+      "minimum": 0
+     }
+    }
+   },
+   "reason": {
+    "type": "string"
+   }
+  },
+  "required": [
+   "approval_id",
+   "tool_call_id",
+   "tool_name",
+   "arguments",
+   "risk",
+   "expires_at"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/JOB_STARTED.json",
+  "type": "object",
+  "properties": {
+   "job_id": {
+    "type": "string"
+   },
+   "tool_call_id": {
+    "type": "string"
+   },
+   "command": {
+    "type": "string"
+   },
+   "detached": {
+    "const": true
+   },
+   "started_at": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "limits": {
+    "type": "object",
+    "properties": {
+     "timeout_s": {
+      "type": "integer",
+      "minimum": 1
+     },
+     "max_output_bytes": {
+      "type": "integer",
+      "minimum": 0
+     }
+    }
+   }
+  },
+  "required": [
+   "job_id",
+   "tool_call_id",
+   "command",
+   "detached"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/JOB_PROGRESS_DELTA.json",
+  "type": "object",
+  "properties": {
+   "stream": {
+    "type": "string",
+    "enum": [
+     "stdout",
+     "stderr"
+    ]
+   },
+   "delta": {
+    "type": "string"
+   },
+   "index": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "stream",
+   "delta",
+   "index"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/JOB_FINISHED.json",
+  "type": "object",
+  "properties": {
+   "status": {
+    "type": "string",
+    "enum": [
+     "COMPLETED",
+     "FAILED",
+     "KILLED",
+     "TIMED_OUT"
+    ]
+   },
+   "exit_code": {
+    "type": [
+     "integer",
+     "null"
+    ]
+   },
+   "signal": {
+    "type": [
+     "string",
+     "null"
+    ]
+   },
+   "summary": {
+    "type": "string"
+   },
+   "output_snapshot": {
+    "type": "string"
+   },
+   "output_truncated": {
+    "type": "boolean"
+   },
+   "output_bytes_total": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "duration_ms": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "triggered_new_turn": {
+    "type": "boolean"
+   },
+   "new_turn_id": {
+    "type": [
+     "string",
+     "null"
+    ]
+   },
+   "injected_into_turn_id": {
+    "type": [
+     "string",
+     "null"
+    ]
+   }
+  },
+  "required": [
+   "status",
+   "exit_code",
+   "summary",
+   "triggered_new_turn"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/JOB_LIST_RESULT.json",
+  "type": "object",
+  "properties": {
+   "jobs": {
+    "type": "array",
+    "items": {
+     "$ref": "https://raep.vyde.dev/v1/payloads/job_summary.json"
+    }
+   }
+  },
+  "required": [
+   "jobs"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/JOB_STATE.json",
+  "type": "object",
+  "properties": {
+   "job_id": {
+    "type": "string"
+   },
+   "status": {
+    "type": "string",
+    "enum": [
+     "RUNNING",
+     "COMPLETED",
+     "FAILED",
+     "KILLED",
+     "TIMED_OUT"
+    ]
+   },
+   "output": {
+    "type": "string"
+   },
+   "next_index": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "job_id",
+   "status"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/HISTORY_PAGE.json",
+  "type": "object",
+  "properties": {
+   "items": {
+    "type": "array",
+    "items": {
+     "$ref": "https://raep.vyde.dev/v1/payloads/history_item.json"
+    }
+   },
+   "has_more": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "items",
+   "has_more"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/ERROR.json",
+  "$ref": "https://raep.vyde.dev/v1/payloads/error_payload.json"
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/SESSION_FORK.json",
+  "type": "object",
+  "properties": {
+   "from_turn_id": {
+    "type": "string"
+   },
+   "inclusive": {
+    "type": "boolean"
+   },
+   "title": {
+    "type": "string"
+   },
+   "agent_id": {
+    "type": "string"
+   },
+   "carry_usage": {
+    "type": "boolean"
+   },
+   "include": {
+    "type": "object",
+    "properties": {
+     "uploads": {
+      "type": "boolean"
+     },
+     "outputs": {
+      "type": "boolean"
+     },
+     "workspace": {
+      "type": "boolean"
+     }
+    }
+   }
+  }
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/SESSION_REWIND.json",
+  "type": "object",
+  "properties": {
+   "to_turn_id": {
+    "type": "string"
+   },
+   "inclusive": {
+    "type": "boolean"
+   },
+   "cancel_pending": {
+    "type": "boolean"
+   },
+   "workspace": {
+    "type": "string",
+    "enum": [
+     "keep",
+     "restore"
+    ]
+   }
+  },
+  "required": [
+   "to_turn_id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/SESSION_COMPACT.json",
+  "type": "object",
+  "properties": {
+   "strategy": {
+    "type": "string",
+    "enum": [
+     "summarize",
+     "truncate"
+    ]
+   },
+   "keep_last_turns": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "instructions": {
+    "type": "string",
+    "maxLength": 1024
+   }
+  }
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/CONTEXT_PIN.json",
+  "type": "object",
+  "properties": {
+   "turn_ids": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    },
+    "minItems": 1
+   },
+   "pinned": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "turn_ids"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/INPUT_STREAM_START.json",
+  "type": "object",
+  "properties": {
+   "stream_id": {
+    "type": "string"
+   },
+   "type": {
+    "type": "string",
+    "enum": [
+     "audio",
+     "video"
+    ]
+   },
+   "mime_type": {
+    "type": "string"
+   },
+   "params": {
+    "type": "object"
+   },
+   "turn_detection": {
+    "type": "string",
+    "enum": [
+     "manual",
+     "server"
+    ]
+   }
+  },
+  "required": [
+   "stream_id",
+   "type",
+   "mime_type"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/INPUT_STREAM_DATA.json",
+  "type": "object",
+  "properties": {
+   "stream_id": {
+    "type": "string"
+   },
+   "index": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "data": {
+    "type": "string"
+   },
+   "timestamp_ms": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "stream_id",
+   "index",
+   "data"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/INPUT_STREAM_END.json",
+  "type": "object",
+  "properties": {
+   "stream_id": {
+    "type": "string"
+   },
+   "commit": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "stream_id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/CLIENT_TOOL_RESULT.json",
+  "type": "object",
+  "properties": {
+   "tool_call_id": {
+    "type": "string"
+   },
+   "status": {
+    "type": "string",
+    "enum": [
+     "OK",
+     "ERROR"
+    ]
+   },
+   "content": {
+    "oneOf": [
+     {
+      "type": "string"
+     },
+     {
+      "type": "array",
+      "items": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/content_part.json"
+      }
+     }
+    ]
+   },
+   "result_summary": {
+    "type": "string"
+   }
+  },
+  "required": [
+   "tool_call_id",
+   "status"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/PRESENCE_UPDATE.json",
+  "type": "object",
+  "properties": {
+   "status": {
+    "type": "string",
+    "enum": [
+     "active",
+     "idle",
+     "typing"
+    ]
+   }
+  },
+  "required": [
+   "status"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/SESSION_UPDATED.json",
+  "type": "object",
+  "properties": {
+   "title": {
+    "type": "string"
+   },
+   "labels": {
+    "type": "object",
+    "additionalProperties": {
+     "type": "string"
+    }
+   },
+   "pinned": {
+    "type": "boolean"
+   },
+   "archived": {
+    "type": "boolean"
+   },
+   "updated_at": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "updated_at"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/SESSION_FORKED.json",
+  "type": "object",
+  "properties": {
+   "session_id": {
+    "type": "string"
+   },
+   "from_session_id": {
+    "type": "string"
+   },
+   "from_turn_id": {
+    "type": "string"
+   },
+   "title": {
+    "type": "string"
+   }
+  },
+  "required": [
+   "session_id",
+   "from_session_id",
+   "from_turn_id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/USER_INPUT_ACCEPTED.json",
+  "type": "object",
+  "properties": {
+   "turn_id": {
+    "type": "string"
+   },
+   "origin": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/origin.json"
+   },
+   "content": {
+    "type": "array",
+    "items": {
+     "$ref": "https://raep.vyde.dev/v1/payloads/content_part.json"
+    },
+    "minItems": 1
+   },
+   "position": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "replaces_turn_id": {
+    "type": "string"
+   }
+  },
+  "required": [
+   "turn_id",
+   "origin",
+   "content"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/PROVIDER_RETRY.json",
+  "type": "object",
+  "properties": {
+   "attempt": {
+    "type": "integer",
+    "minimum": 2
+   },
+   "reason": {
+    "type": "string"
+   },
+   "provider": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "model": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ]
+   },
+   "fallback": {
+    "type": "boolean"
+   },
+   "discard_from_index": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "attempt",
+   "reason",
+   "provider",
+   "fallback"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/APPROVAL_RESOLVED.json",
+  "type": "object",
+  "properties": {
+   "approval_id": {
+    "type": "string"
+   },
+   "tool_call_id": {
+    "type": "string"
+   },
+   "decision": {
+    "type": "string",
+    "enum": [
+     "approve",
+     "deny"
+    ]
+   },
+   "decided_by": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "properties": {
+      "user_id": {
+       "type": "string"
+      },
+      "decision": {
+       "type": "string",
+       "enum": [
+        "approve",
+        "deny"
+       ]
+      },
+      "at": {
+       "type": "integer",
+       "minimum": 0
+      }
+     },
+     "required": [
+      "user_id",
+      "decision"
+     ]
+    }
+   },
+   "quorum_met": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "approval_id",
+   "tool_call_id",
+   "decision",
+   "decided_by"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/CLIENT_TOOL_REQUEST.json",
+  "type": "object",
+  "properties": {
+   "tool_call_id": {
+    "type": "string"
+   },
+   "tool_name": {
+    "type": "string"
+   },
+   "arguments": {
+    "type": "object"
+   },
+   "expires_at": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "tool_call_id",
+   "tool_name",
+   "arguments",
+   "expires_at"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/HISTORY_REWOUND.json",
+  "type": "object",
+  "properties": {
+   "to_turn_id": {
+    "type": "string"
+   },
+   "inclusive": {
+    "type": "boolean"
+   },
+   "rewound_turn_ids": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "side_effects": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "properties": {
+      "tool_call_id": {
+       "type": "string"
+      },
+      "tool_name": {
+       "type": "string"
+      },
+      "side_effects": {
+       "type": "string",
+       "enum": [
+        "local",
+        "external"
+       ]
+      }
+     },
+     "required": [
+      "tool_call_id",
+      "tool_name",
+      "side_effects"
+     ]
+    }
+   },
+   "workspace_restored": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "to_turn_id",
+   "inclusive",
+   "rewound_turn_ids"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/CONTEXT_UPDATED.json",
+  "type": "object",
+  "properties": {
+   "pinned_turn_ids": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   }
+  },
+  "required": [
+   "pinned_turn_ids"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/QUOTA_WARNING.json",
+  "type": "object",
+  "properties": {
+   "dimension": {
+    "type": "string"
+   },
+   "used": {
+    "type": "number"
+   },
+   "limit": {
+    "type": "number"
+   },
+   "threshold": {
+    "type": "number",
+    "minimum": 0,
+    "maximum": 100
+   },
+   "resets_at": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "dimension",
+   "used",
+   "limit",
+   "threshold"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/SERVER_DRAINING.json",
+  "type": "object",
+  "properties": {
+   "deadline_at": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "reason": {
+    "type": "string"
+   }
+  },
+  "required": [
+   "deadline_at"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/PRESENCE.json",
+  "type": "object",
+  "properties": {
+   "participants": {
+    "type": "array",
+    "items": {
+     "$ref": "https://raep.vyde.dev/v1/payloads/participant.json"
+    }
+   }
+  },
+  "required": [
+   "participants"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/tool_descriptor.json",
+  "type": "object",
+  "properties": {
+   "name": {
+    "type": "string",
+    "minLength": 1
+   },
+   "description": {
+    "type": "string"
+   },
+   "input_schema": {
+    "type": "object"
+   },
+   "output_schema": {
+    "type": "object"
+   },
+   "executor": {
+    "type": "string",
+    "enum": [
+     "server",
+     "client"
+    ]
+   },
+   "risk": {
+    "type": "string",
+    "enum": [
+     "low",
+     "medium",
+     "high"
+    ]
+   },
+   "side_effects": {
+    "type": "string",
+    "enum": [
+     "none",
+     "local",
+     "external"
+    ]
+   },
+   "idempotent": {
+    "type": "boolean"
+   },
+   "timeout_s": {
+    "type": "integer",
+    "minimum": 1
+   },
+   "retry": {
+    "type": "object",
+    "properties": {
+     "max_attempts": {
+      "type": "integer",
+      "minimum": 1
+     },
+     "backoff_ms": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "retry_on": {
+      "type": "array",
+      "items": {
+       "type": "string",
+       "enum": [
+        "TIMED_OUT",
+        "ERROR"
+       ]
+      }
+     }
+    }
+   },
+   "scopes": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "detachable": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "name",
+   "input_schema"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/response_format.json",
+  "oneOf": [
+   {
+    "type": "object",
+    "properties": {
+     "type": {
+      "const": "text"
+     }
+    },
+    "required": [
+     "type"
+    ]
+   },
+   {
+    "type": "object",
+    "properties": {
+     "type": {
+      "const": "json_schema"
+     },
+     "schema": {
+      "type": "object"
+     },
+     "strict": {
+      "type": "boolean"
+     }
+    },
+    "required": [
+     "type",
+     "schema"
+    ]
+   }
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/participant.json",
+  "type": "object",
+  "properties": {
+   "user_id": {
+    "type": "string"
+   },
+   "display_name": {
+    "type": "string"
+   },
+   "role": {
+    "type": "string",
+    "enum": [
+     "viewer",
+     "editor",
+     "owner"
+    ]
+   },
+   "mode": {
+    "type": "string",
+    "enum": [
+     "controller",
+     "observer"
+    ]
+   },
+   "status": {
+    "type": "string",
+    "enum": [
+     "active",
+     "idle",
+     "typing"
+    ]
+   },
+   "connected_at": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "last_seen_at": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "user_id",
+   "role",
+   "mode"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/session_summary.json",
+  "type": "object",
+  "properties": {
+   "session_id": {
+    "type": "string"
+   },
+   "title": {
+    "type": "string"
+   },
+   "title_source": {
+    "type": "string",
+    "enum": [
+     "user",
+     "auto"
+    ]
+   },
+   "labels": {
+    "type": "object",
+    "additionalProperties": {
+     "type": "string"
+    }
+   },
+   "pinned": {
+    "type": "boolean"
+   },
+   "archived": {
+    "type": "boolean"
+   },
+   "status": {
+    "type": "string",
+    "enum": [
+     "ACTIVE",
+     "SUSPENDED",
+     "CLOSED"
+    ]
+   },
+   "agent": {
+    "type": "object",
+    "properties": {
+     "id": {
+      "type": "string"
+     },
+     "version": {
+      "type": "string"
+     }
+    },
+    "required": [
+     "id"
+    ]
+   },
+   "parent": {
+    "type": "object"
+   },
+   "forked_from": {
+    "type": "object"
+   },
+   "created_at": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "updated_at": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "last_activity_at": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "turn_count": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "usage_total": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/usage.json"
+   },
+   "has_pending": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "session_id",
+   "status",
+   "agent",
+   "created_at",
+   "updated_at"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/session_list_result.json",
+  "type": "object",
+  "properties": {
+   "sessions": {
+    "type": "array",
+    "items": {
+     "$ref": "https://raep.vyde.dev/v1/payloads/session_summary.json"
+    }
+   },
+   "next_cursor": {
+    "type": [
+     "string",
+     "null"
+    ]
+   }
+  },
+  "required": [
+   "sessions"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/session_create.json",
+  "type": "object",
+  "properties": {
+   "agent_id": {
+    "type": "string",
+    "minLength": 1
+   },
+   "agent_override": {
+    "type": "object"
+   },
+   "title": {
+    "type": "string"
+   },
+   "labels": {
+    "type": "object",
+    "additionalProperties": {
+     "type": "string"
+    },
+    "maxProperties": 16
+   },
+   "options": {
+    "type": "object"
+   }
+  },
+  "required": [
+   "agent_id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/session_patch.json",
+  "type": "object",
+  "properties": {
+   "title": {
+    "type": [
+     "string",
+     "null"
+    ]
+   },
+   "labels": {
+    "type": "object",
+    "additionalProperties": {
+     "type": [
+      "string",
+      "null"
+     ]
+    }
+   },
+   "pinned": {
+    "type": "boolean"
+   },
+   "archived": {
+    "type": "boolean"
+   }
+  }
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/agent_list_result.json",
+  "type": "object",
+  "properties": {
+   "agents": {
+    "type": "array",
+    "items": {
+     "$ref": "https://raep.vyde.dev/v1/payloads/agent_summary.json"
+    }
+   },
+   "next_cursor": {
+    "type": [
+     "string",
+     "null"
+    ]
+   }
+  },
+  "required": [
+   "agents"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/share.json",
+  "type": "object",
+  "properties": {
+   "principal": {
+    "type": "string"
+   },
+   "role": {
+    "type": "string",
+    "enum": [
+     "viewer",
+     "editor",
+     "owner"
+    ]
+   }
+  },
+  "required": [
+   "principal",
+   "role"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/run_request.json",
+  "type": "object",
+  "properties": {
+   "agent_id": {
+    "type": "string",
+    "minLength": 1
+   },
+   "session_id": {
+    "type": "string"
+   },
+   "input": {
+    "type": "object",
+    "oneOf": [
+     {
+      "required": [
+       "prompt"
+      ]
+     },
+     {
+      "required": [
+       "content"
+      ]
+     }
+    ],
+    "properties": {
+     "prompt": {
+      "type": "string"
+     },
+     "content": {
+      "type": "array",
+      "items": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/content_part.json"
+      },
+      "minItems": 1
+     }
+    }
+   },
+   "response_format": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/response_format.json"
+   },
+   "overrides": {
+    "type": "object"
+   },
+   "options": {
+    "type": "object"
+   },
+   "wait_s": {
+    "type": "integer",
+    "minimum": 0,
+    "maximum": 120
+   },
+   "on_approval": {
+    "type": "string",
+    "enum": [
+     "deny",
+     "wait",
+     "fail"
+    ]
+   },
+   "ephemeral": {
+    "type": "boolean"
+   },
+   "title": {
+    "type": "string"
+   },
+   "labels": {
+    "type": "object",
+    "additionalProperties": {
+     "type": "string"
+    }
+   },
+   "metadata": {
+    "type": "object"
+   }
+  },
+  "required": [
+   "agent_id",
+   "input"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/run.json",
+  "type": "object",
+  "properties": {
+   "run_id": {
+    "type": "string"
+   },
+   "session_id": {
+    "type": "string"
+   },
+   "turn_id": {
+    "type": "string"
+   },
+   "status": {
+    "type": "string",
+    "enum": [
+     "queued",
+     "running",
+     "awaiting_approval",
+     "completed",
+     "failed",
+     "cancelled"
+    ]
+   },
+   "output": {
+    "type": "object",
+    "properties": {
+     "text": {
+      "type": "string"
+     },
+     "parts": {
+      "type": "array",
+      "items": {
+       "type": "object"
+      }
+     },
+     "structured": {}
+    }
+   },
+   "usage": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/usage.json"
+   },
+   "error": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/error_payload.json"
+   },
+   "created_at": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "finished_at": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "run_id",
+   "session_id",
+   "status",
+   "created_at"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/schedule_request.json",
+  "type": "object",
+  "properties": {
+   "agent_id": {
+    "type": "string"
+   },
+   "input": {
+    "type": "object"
+   },
+   "trigger": {
+    "oneOf": [
+     {
+      "type": "object",
+      "properties": {
+       "type": {
+        "const": "cron"
+       },
+       "expression": {
+        "type": "string"
+       },
+       "timezone": {
+        "type": "string"
+       }
+      },
+      "required": [
+       "type",
+       "expression"
+      ]
+     },
+     {
+      "type": "object",
+      "properties": {
+       "type": {
+        "const": "interval"
+       },
+       "every_s": {
+        "type": "integer",
+        "minimum": 1
+       }
+      },
+      "required": [
+       "type",
+       "every_s"
+      ]
+     },
+     {
+      "type": "object",
+      "properties": {
+       "type": {
+        "const": "once"
+       },
+       "at": {
+        "type": "integer",
+        "minimum": 0
+       }
+      },
+      "required": [
+       "type",
+       "at"
+      ]
+     }
+    ]
+   },
+   "session_mode": {
+    "type": "string",
+    "enum": [
+     "new",
+     "reuse"
+    ]
+   },
+   "session_id": {
+    "type": "string"
+   },
+   "overlap": {
+    "type": "string",
+    "enum": [
+     "skip",
+     "queue",
+     "cancel_previous"
+    ]
+   },
+   "on_approval": {
+    "type": "string",
+    "enum": [
+     "deny",
+     "wait",
+     "fail"
+    ]
+   },
+   "catchup": {
+    "type": "string",
+    "enum": [
+     "none",
+     "one"
+    ]
+   },
+   "notify": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/notify_config.json"
+   },
+   "enabled": {
+    "type": "boolean"
+   },
+   "max_runs": {
+    "type": "integer",
+    "minimum": 1
+   },
+   "expires_at": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "disable_after_failures": {
+    "type": "integer",
+    "minimum": 1
+   },
+   "title": {
+    "type": "string"
+   },
+   "labels": {
+    "type": "object",
+    "additionalProperties": {
+     "type": "string"
+    }
+   }
+  },
+  "required": [
+   "agent_id",
+   "input",
+   "trigger"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/schedule.json",
+  "type": "object",
+  "properties": {
+   "schedule_id": {
+    "type": "string"
+   },
+   "enabled": {
+    "type": "boolean"
+   },
+   "next_run_at": {
+    "type": [
+     "integer",
+     "null"
+    ]
+   },
+   "last_run": {
+    "type": "object",
+    "properties": {
+     "run_id": {
+      "type": "string"
+     },
+     "status": {
+      "type": "string"
+     },
+     "at": {
+      "type": "integer",
+      "minimum": 0
+     }
+    }
+   },
+   "consecutive_failures": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "schedule_id",
+   "enabled"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/trigger_request.json",
+  "type": "object",
+  "properties": {
+   "agent_id": {
+    "type": "string"
+   },
+   "input_template": {
+    "type": "string"
+   },
+   "session_mode": {
+    "type": "string",
+    "enum": [
+     "new",
+     "reuse"
+    ]
+   },
+   "on_approval": {
+    "type": "string",
+    "enum": [
+     "deny",
+     "wait",
+     "fail"
+    ]
+   },
+   "title": {
+    "type": "string"
+   },
+   "labels": {
+    "type": "object",
+    "additionalProperties": {
+     "type": "string"
+    }
+   }
+  },
+  "required": [
+   "agent_id",
+   "input_template"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/trigger.json",
+  "type": "object",
+  "properties": {
+   "trigger_id": {
+    "type": "string"
+   },
+   "secret": {
+    "type": "string"
+   },
+   "fire_url": {
+    "type": "string"
+   },
+   "created_at": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "trigger_id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/quota.json",
+  "type": "object",
+  "properties": {
+   "tenant": {
+    "type": "string"
+   },
+   "period": {
+    "type": "object",
+    "properties": {
+     "start": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "end": {
+      "type": "integer",
+      "minimum": 0
+     }
+    }
+   },
+   "dimensions": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "properties": {
+      "name": {
+       "type": "string"
+      },
+      "limit": {
+       "type": "number"
+      },
+      "used": {
+       "type": "number"
+      },
+      "remaining": {
+       "type": "number"
+      },
+      "resets_at": {
+       "type": "integer",
+       "minimum": 0
+      }
+     },
+     "required": [
+      "name",
+      "limit",
+      "used"
+     ]
+    }
+   }
+  },
+  "required": [
+   "tenant",
+   "dimensions"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/deprecation.json",
+  "type": "object",
+  "properties": {
+   "name": {
+    "type": "string"
+   },
+   "kind": {
+    "type": "string",
+    "enum": [
+     "field",
+     "event",
+     "capability",
+     "error_code",
+     "enum_value"
+    ]
+   },
+   "replacement": {
+    "type": "string"
+   },
+   "sunset_at": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "name",
+   "kind"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/info.json",
+  "type": "object",
+  "properties": {
+   "server_version": {
+    "type": "string"
+   },
+   "wire_versions": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    },
+    "minItems": 1
+   },
+   "capabilities": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "limits": {
+    "type": "object"
+   },
+   "transports": {
+    "type": "object",
+    "properties": {
+     "ws": {
+      "type": "string"
+     },
+     "sse": {
+      "type": "string"
+     }
+    }
+   },
+   "registries": {
+    "type": "object",
+    "additionalProperties": {
+     "type": "string"
+    }
+   },
+   "deprecations": {
+    "type": "array",
+    "items": {
+     "$ref": "https://raep.vyde.dev/v1/payloads/deprecation.json"
+    }
+   },
+   "draining": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "server_version",
+   "wire_versions",
+   "capabilities"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/health.json",
+  "type": "object",
+  "properties": {
+   "status": {
+    "type": "string",
+    "enum": [
+     "ok",
+     "ready",
+     "draining",
+     "degraded"
+    ]
+   },
+   "checks": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "properties": {
+      "name": {
+       "type": "string"
+      },
+      "status": {
+       "type": "string",
+       "enum": [
+        "ok",
+        "degraded",
+        "failed"
+       ]
+      },
+      "detail": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "name",
+      "status"
+     ]
+    }
+   }
+  },
+  "required": [
+   "status"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/conformance_scenario.json",
+  "type": "object",
+  "properties": {
+   "id": {
+    "type": "string",
+    "pattern": "^C-[0-9]{3}$"
+   },
+   "title": {
+    "type": "string"
+   },
+   "profile": {
+    "type": "string"
+   },
+   "requires": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "setup": {
+    "type": "object",
+    "properties": {
+     "agent": {
+      "type": "object"
+     },
+     "tools": {
+      "type": "array",
+      "items": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/tool_descriptor.json"
+      }
+     },
+     "provider_script": {
+      "type": "array",
+      "items": {
+       "type": "object"
+      }
+     }
+    }
+   },
+   "steps": {
+    "type": "array",
+    "items": {
+     "oneOf": [
+      {
+       "type": "object",
+       "properties": {
+        "send": {
+         "type": "object"
+        }
+       },
+       "required": [
+        "send"
+       ],
+       "additionalProperties": false
+      },
+      {
+       "type": "object",
+       "properties": {
+        "expect": {
+         "type": "object",
+         "properties": {
+          "type": {
+           "type": "string"
+          },
+          "payload": {
+           "type": "object"
+          },
+          "envelope": {
+           "type": "object"
+          }
+         },
+         "required": [
+          "type"
+         ]
+        }
+       },
+       "required": [
+        "expect"
+       ],
+       "additionalProperties": false
+      },
+      {
+       "type": "object",
+       "properties": {
+        "expect_none": {
+         "type": "object",
+         "properties": {
+          "type": {
+           "type": "string"
+          },
+          "within_ms": {
+           "type": "integer",
+           "minimum": 1
+          }
+         },
+         "required": [
+          "type",
+          "within_ms"
+         ]
+        }
+       },
+       "required": [
+        "expect_none"
+       ],
+       "additionalProperties": false
+      },
+      {
+       "type": "object",
+       "properties": {
+        "action": {
+         "type": "object",
+         "properties": {
+          "name": {
+           "type": "string",
+           "enum": [
+            "disconnect",
+            "reconnect",
+            "crash_server",
+            "advance_time",
+            "fail_provider",
+            "lose_lease"
+           ]
+          },
+          "args": {
+           "type": "object"
+          }
+         },
+         "required": [
+          "name"
+         ]
+        }
+       },
+       "required": [
+        "action"
+       ],
+       "additionalProperties": false
+      }
+     ]
+    },
+    "minItems": 1
+   }
+  },
+  "required": [
+   "id",
+   "title",
+   "profile",
+   "steps"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/conformance_report.json",
+  "type": "object",
+  "properties": {
+   "implementation": {
+    "type": "string"
+   },
+   "version": {
+    "type": "string"
+   },
+   "wire_version": {
+    "type": "string"
+   },
+   "claims": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "results": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "properties": {
+      "id": {
+       "type": "string"
+      },
+      "result": {
+       "type": "string",
+       "enum": [
+        "pass",
+        "fail",
+        "skip"
+       ]
+      },
+      "reason": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "id",
+      "result"
+     ]
+    }
+   }
+  },
+  "required": [
+   "implementation",
+   "version",
+   "wire_version",
+   "claims",
+   "results"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/HELLO.json",
+  "type": "object",
+  "properties": {
+   "server_version": {
+    "type": "string"
+   },
+   "wire_versions": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    },
+    "minItems": 1
+   },
+   "capabilities": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "limits": {
+    "type": "object",
+    "properties": {
+     "max_frame_bytes": {
+      "type": "integer",
+      "minimum": 1
+     },
+     "max_prompt_bytes": {
+      "type": "integer",
+      "minimum": 1
+     },
+     "max_concurrent_jobs": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "replay_buffer_events": {
+      "type": "integer",
+      "minimum": 1
+     },
+     "job_output_retention_s": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "max_parts": {
+      "type": "integer",
+      "minimum": 1
+     },
+     "max_inline_bytes": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "max_upload_bytes": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "max_inspect_bytes": {
+      "type": "integer",
+      "minimum": 1024
+     },
+     "max_result_bytes": {
+      "type": "integer",
+      "minimum": 1024
+     },
+     "child_retention_s": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "max_notify_targets": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "max_output_part_bytes": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "max_export_bytes": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "export_ttl_s": {
+      "type": "integer",
+      "minimum": 1
+     },
+     "max_queued_inputs": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "session_retention_s": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "max_commands_per_s": {
+      "type": "integer",
+      "minimum": 1
+     },
+     "max_client_tool_result_bytes": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "max_input_stream_bytes": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "max_workspace_bytes": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "max_snapshots": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "max_participants": {
+      "type": "integer",
+      "minimum": 1
+     },
+     "max_tool_result_bytes": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "run_retention_s": {
+      "type": "integer",
+      "minimum": 0
+     },
+     "max_pinned_turns": {
+      "type": "integer",
+      "minimum": 0
+     }
+    }
+   },
+   "heartbeat_s": {
+    "type": "integer",
+    "minimum": 1
+   },
+   "draining": {
+    "type": "boolean"
+   },
+   "deprecations": {
+    "type": "array",
+    "items": {
+     "$ref": "https://raep.vyde.dev/v1/payloads/deprecation.json"
+    }
+   }
+  },
+  "required": [
+   "server_version",
+   "wire_versions",
+   "capabilities",
+   "limits"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/SESSION_STATE.json",
+  "type": "object",
+  "properties": {
+   "status": {
+    "type": "string",
+    "enum": [
+     "ACTIVE",
+     "SUSPENDED",
+     "CLOSED"
+    ]
+   },
+   "history_summary": {
+    "type": "array",
+    "items": {
+     "$ref": "https://raep.vyde.dev/v1/payloads/history_item.json"
+    }
+   },
+   "usage_total": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/usage.json"
+   },
+   "usage_rollup": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/usage.json"
+   },
+   "budget_remaining": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/budget_map.json"
+   },
+   "parent": {
+    "type": "object",
+    "properties": {
+     "session_id": {
+      "type": "string"
+     },
+     "turn_id": {
+      "type": "string"
+     },
+     "tool_call_id": {
+      "type": "string"
+     },
+     "depth": {
+      "type": "integer",
+      "minimum": 1
+     }
+    },
+    "required": [
+     "session_id",
+     "tool_call_id"
+    ]
+   },
+   "children": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "properties": {
+      "child_session_id": {
+       "type": "string"
+      },
+      "agent_id": {
+       "type": "string"
+      },
+      "state": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/child_state.json"
+      },
+      "lifetime": {
+       "type": "string",
+       "enum": [
+        "turn",
+        "session"
+       ]
+      }
+     },
+     "required": [
+      "child_session_id",
+      "state"
+     ]
+    }
+   },
+   "delegator_suspended": {
+    "type": "boolean"
+   },
+   "notify": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/notify_summary.json"
+   },
+   "imported_from": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/imported_from.json"
+   },
+   "title": {
+    "type": "string"
+   },
+   "labels": {
+    "type": "object",
+    "additionalProperties": {
+     "type": "string"
+    }
+   },
+   "pinned": {
+    "type": "boolean"
+   },
+   "archived": {
+    "type": "boolean"
+   },
+   "forked_from": {
+    "type": "object",
+    "properties": {
+     "session_id": {
+      "type": "string"
+     },
+     "turn_id": {
+      "type": "string"
+     },
+     "at": {
+      "type": "integer",
+      "minimum": 0
+     }
+    },
+    "required": [
+     "session_id",
+     "turn_id"
+    ]
+   },
+   "pinned_turn_ids": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "participants": {
+    "type": "array",
+    "items": {
+     "$ref": "https://raep.vyde.dev/v1/payloads/participant.json"
+    }
+   },
+   "workspace": {
+    "type": "object",
+    "properties": {
+     "snapshots": {
+      "type": "boolean"
+     },
+     "last_snapshot_turn_id": {
+      "type": "string"
+     },
+     "bytes": {
+      "type": "integer",
+      "minimum": 0
+     }
+    }
+   }
+  },
+  "required": [
+   "status",
+   "history_summary"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/notify_summary.json",
+  "type": "object",
+  "properties": {
+   "channel": {
+    "type": "string"
+   },
+   "endpoint_id": {
+    "type": "string"
+   },
+   "url_host": {
+    "type": "string"
+   },
+   "events": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "when": {
+    "type": "string"
+   },
+   "include": {
+    "type": "string"
+   },
+   "include_children": {
+    "type": "boolean"
+   },
+   "coalesce_s": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "state": {
+    "type": "string",
+    "enum": [
+     "active",
+     "failing",
+     "disabled"
+    ]
+   }
+  },
+  "required": [
+   "channel",
+   "events",
+   "state"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/imported_from.json",
+  "type": "object",
+  "properties": {
+   "exporter": {
+    "type": "string"
+   },
+   "original_session_id": {
+    "type": "string"
+   },
+   "exported_at": {
+    "type": "integer"
+   },
+   "imported_at": {
+    "type": "integer"
+   }
+  },
+  "required": [
+   "original_session_id",
+   "exported_at"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/AUTH_EXPIRING.json",
+  "type": "object",
+  "properties": {
+   "expires_at": {
+    "type": "integer"
+   },
+   "refresh_before": {
+    "type": "integer"
+   }
+  },
+  "required": [
+   "expires_at"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/AUTH_REFRESH.json",
+  "type": "object",
+  "properties": {
+   "token": {
+    "type": "string",
+    "minLength": 1
+   }
+  },
+  "required": [
+   "token"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/AUTH_REFRESHED.json",
+  "type": "object",
+  "properties": {
+   "expires_at": {
+    "type": "integer"
+   }
+  },
+  "required": [
+   "expires_at"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/SESSION_CONFIGURE.json",
+  "type": "object",
+  "properties": {
+   "agent_id": {
+    "type": "string"
+   },
+   "agent_override": {
+    "type": "object"
+   },
+   "options": {
+    "type": "object"
+   },
+   "apply": {
+    "type": "string",
+    "enum": [
+     "now",
+     "next_turn"
+    ]
+   }
+  }
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/SESSION_CONFIGURED.json",
+  "type": "object",
+  "properties": {
+   "agent": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/agent_summary.json"
+   },
+   "applied": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "agent"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/AGENT_CHANGED.json",
+  "type": "object",
+  "properties": {
+   "from_agent": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/agent_ref.json"
+   },
+   "to_agent": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/agent_ref.json"
+   },
+   "reason": {
+    "type": "string"
+   },
+   "effective": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/agent_summary.json"
+   }
+  },
+  "required": [
+   "from_agent",
+   "to_agent"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/BUDGET_WARNING.json",
+  "type": "object",
+  "properties": {
+   "scope": {
+    "type": "string",
+    "enum": [
+     "turn",
+     "session"
+    ]
+   },
+   "metric": {
+    "type": "string",
+    "enum": [
+     "tokens",
+     "cost",
+     "tool_calls",
+     "duration"
+    ]
+   },
+   "used": {
+    "type": "number",
+    "minimum": 0
+   },
+   "limit": {
+    "type": "number",
+    "minimum": 0
+   },
+   "threshold": {
+    "type": "integer",
+    "minimum": 1,
+    "maximum": 100
+   }
+  },
+  "required": [
+   "scope",
+   "metric",
+   "used",
+   "limit",
+   "threshold"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/HISTORY_COMPACTED.json",
+  "type": "object",
+  "properties": {
+   "up_to_turn_id": {
+    "type": "string"
+   },
+   "strategy": {
+    "type": "string",
+    "enum": [
+     "summarize",
+     "truncate"
+    ]
+   },
+   "tokens_before": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "tokens_after": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "trigger": {
+    "type": "string",
+    "enum": [
+     "auto",
+     "manual"
+    ]
+   }
+  },
+  "required": [
+   "up_to_turn_id",
+   "strategy"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/child_state.json",
+  "type": "string",
+  "enum": [
+   "RUNNING",
+   "AWAITING_APPROVAL",
+   "AWAITING_INPUT",
+   "IDLE",
+   "FAILED",
+   "STOPPED",
+   "CLOSED"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/pending.json",
+  "type": "object",
+  "properties": {
+   "kind": {
+    "type": "string",
+    "enum": [
+     "approval",
+     "input"
+    ]
+   },
+   "tool_call_id": {
+    "type": "string"
+   },
+   "tool_name": {
+    "type": "string"
+   },
+   "risk": {
+    "type": "string",
+    "enum": [
+     "low",
+     "medium",
+     "high"
+    ]
+   },
+   "question": {
+    "type": "string",
+    "maxLength": 1024
+   },
+   "options": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "expires_at": {
+    "type": "integer"
+   },
+   "routed_to": {
+    "type": "string",
+    "enum": [
+     "human",
+     "parent"
+    ]
+   }
+  },
+  "required": [
+   "kind",
+   "tool_call_id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/child_result.json",
+  "type": "object",
+  "properties": {
+   "status": {
+    "type": "string",
+    "enum": [
+     "completed",
+     "failed",
+     "stopped",
+     "budget_exceeded"
+    ]
+   },
+   "summary": {
+    "type": "string",
+    "maxLength": 2048
+   },
+   "summary_truncated": {
+    "type": "boolean"
+   },
+   "output": {},
+   "output_schema_valid": {
+    "type": "boolean"
+   },
+   "artifacts": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "properties": {
+      "name": {
+       "type": "string"
+      },
+      "mime_type": {
+       "type": "string"
+      },
+      "bytes": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "source": {
+       "type": "object",
+       "properties": {
+        "kind": {
+         "type": "string",
+         "enum": [
+          "upload"
+         ]
+        },
+        "upload_id": {
+         "type": "string"
+        }
+       },
+       "required": [
+        "kind",
+        "upload_id"
+       ]
+      }
+     },
+     "required": [
+      "name",
+      "source"
+     ]
+    }
+   },
+   "usage": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/usage.json"
+   },
+   "error": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/error_payload.json"
+   },
+   "final_seq": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "child_turn_id": {
+    "type": "string"
+   }
+  },
+  "required": [
+   "status",
+   "summary"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/CHILD_SESSION_STARTED.json",
+  "type": "object",
+  "properties": {
+   "child_session_id": {
+    "type": "string"
+   },
+   "agent_id": {
+    "type": "string"
+   },
+   "tool_call_id": {
+    "type": "string"
+   },
+   "lifetime": {
+    "type": "string",
+    "enum": [
+     "turn",
+     "session"
+    ]
+   },
+   "task_summary": {
+    "type": "string",
+    "maxLength": 512
+   },
+   "depth": {
+    "type": "integer",
+    "minimum": 1
+   },
+   "name": {
+    "type": "string",
+    "maxLength": 64
+   },
+   "budget_reserved": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/budget_map.json"
+   }
+  },
+  "required": [
+   "child_session_id",
+   "agent_id",
+   "tool_call_id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/CHILD_SESSION_UPDATED.json",
+  "type": "object",
+  "properties": {
+   "child_session_id": {
+    "type": "string"
+   },
+   "state": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/child_state.json"
+   },
+   "reason": {
+    "type": "string",
+    "enum": [
+     "state_change",
+     "approval_pending",
+     "approval_escalated",
+     "input_requested",
+     "budget_warning",
+     "user_message",
+     "turn_finished",
+     "delegator_control",
+     "error"
+    ]
+   },
+   "summary": {
+    "type": "string",
+    "maxLength": 1024
+   },
+   "usage": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/usage.json"
+   },
+   "budget_remaining": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/budget_map.json"
+   },
+   "pending": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/pending.json"
+   },
+   "result": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/child_result.json"
+   },
+   "child_seq": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "error": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/error_payload.json"
+   }
+  },
+  "required": [
+   "child_session_id",
+   "state",
+   "reason"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/DELEGATOR_CONTROL.json",
+  "type": "object",
+  "properties": {
+   "action": {
+    "type": "string",
+    "enum": [
+     "suspend",
+     "release"
+    ]
+   },
+   "reason": {
+    "type": "string",
+    "maxLength": 256
+   }
+  },
+  "required": [
+   "action"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/DELEGATOR_STATE_CHANGED.json",
+  "type": "object",
+  "properties": {
+   "suspended": {
+    "type": "boolean"
+   },
+   "by": {
+    "type": "string",
+    "enum": [
+     "client",
+     "server"
+    ]
+   },
+   "queued_messages": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "reason": {
+    "type": "string",
+    "maxLength": 256
+   }
+  },
+  "required": [
+   "suspended"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/spawn_agent_args.json",
+  "type": "object",
+  "properties": {
+   "agent_id": {
+    "type": "string",
+    "minLength": 1
+   },
+   "task": {
+    "oneOf": [
+     {
+      "type": "string",
+      "minLength": 1
+     },
+     {
+      "type": "array",
+      "items": {
+       "type": "object"
+      },
+      "minItems": 1
+     }
+    ]
+   },
+   "name": {
+    "type": "string",
+    "maxLength": 64
+   },
+   "lifetime": {
+    "type": "string",
+    "enum": [
+     "turn",
+     "session"
+    ]
+   },
+   "budget_share": {
+    "oneOf": [
+     {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 1
+     },
+     {
+      "$ref": "https://raep.vyde.dev/v1/payloads/budget_map.json"
+     }
+    ]
+   },
+   "scopes": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "inspect": {
+    "type": "string",
+    "enum": [
+     "summary",
+     "events",
+     "full"
+    ]
+   },
+   "output_schema": {
+    "type": "object"
+   },
+   "context": {
+    "type": "object",
+    "properties": {
+     "mode": {
+      "type": "string",
+      "enum": [
+       "none",
+       "summary"
+      ]
+     },
+     "attachments": {
+      "type": "array",
+      "items": {
+       "type": "string"
+      },
+      "maxItems": 16
+     }
+    }
+   },
+   "workspace": {
+    "type": "string",
+    "enum": [
+     "isolated",
+     "shared_ro",
+     "shared_rw"
+    ]
+   },
+   "ttl_s": {
+    "type": "integer",
+    "minimum": 1
+   }
+  },
+  "required": [
+   "agent_id",
+   "task"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/spawn_agent_result.json",
+  "type": "object",
+  "properties": {
+   "child_session_id": {
+    "type": "string"
+   },
+   "state": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/child_state.json"
+   },
+   "depth": {
+    "type": "integer",
+    "minimum": 1
+   },
+   "budget_reserved": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/budget_map.json"
+   },
+   "agent": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/agent_summary.json"
+   }
+  },
+  "required": [
+   "child_session_id",
+   "state",
+   "depth"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/child_status.json",
+  "type": "object",
+  "properties": {
+   "state": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/child_state.json"
+   },
+   "activity": {
+    "type": "string",
+    "maxLength": 512
+   },
+   "last_output_excerpt": {
+    "type": "string",
+    "maxLength": 2048
+   },
+   "pending": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/pending.json"
+   },
+   "usage": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/usage.json"
+   },
+   "usage_rollup": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/usage.json"
+   },
+   "budget_remaining": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/budget_map.json"
+   },
+   "jobs": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "properties": {
+      "job_id": {
+       "type": "string"
+      },
+      "command": {
+       "type": "string"
+      },
+      "status": {
+       "type": "string"
+      }
+     },
+     "required": [
+      "job_id",
+      "status"
+     ]
+    }
+   },
+   "children": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "properties": {
+      "child_session_id": {
+       "type": "string"
+      },
+      "state": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/child_state.json"
+      }
+     },
+     "required": [
+      "child_session_id",
+      "state"
+     ]
+    }
+   },
+   "last_seq": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "delegator_suspended": {
+    "type": "boolean"
+   },
+   "updated_at": {
+    "type": "integer"
+   }
+  },
+  "required": [
+   "state"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/inspect_agent_args.json",
+  "type": "object",
+  "properties": {
+   "child_session_id": {
+    "type": "string"
+   },
+   "view": {
+    "type": "string",
+    "enum": [
+     "status",
+     "transcript",
+     "events",
+     "jobs"
+    ]
+   },
+   "from_seq": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "cursor": {
+    "type": "string"
+   },
+   "limit": {
+    "type": "integer",
+    "minimum": 1,
+    "maximum": 200
+   },
+   "job_id": {
+    "type": "string"
+   },
+   "from_index": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "child_session_id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/inspect_agent_result.json",
+  "type": "object",
+  "properties": {
+   "view": {
+    "type": "string",
+    "enum": [
+     "status",
+     "transcript",
+     "events",
+     "jobs"
+    ]
+   },
+   "child_session_id": {
+    "type": "string"
+   },
+   "status": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/child_status.json"
+   },
+   "items": {
+    "type": "array",
+    "items": {
+     "type": "object"
+    }
+   },
+   "next_cursor": {
+    "type": [
+     "string",
+     "null"
+    ]
+   },
+   "next_seq": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "truncated": {
+    "type": "boolean"
+   },
+   "bytes": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "view",
+   "child_session_id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/message_agent_args.json",
+  "type": "object",
+  "properties": {
+   "child_session_id": {
+    "type": "string"
+   },
+   "content": {
+    "oneOf": [
+     {
+      "type": "string",
+      "minLength": 1
+     },
+     {
+      "type": "array",
+      "items": {
+       "type": "object"
+      },
+      "minItems": 1
+     }
+    ]
+   },
+   "delivery": {
+    "type": "string",
+    "enum": [
+     "steer",
+     "queue",
+     "interrupt"
+    ]
+   }
+  },
+  "required": [
+   "child_session_id",
+   "content"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/message_agent_result.json",
+  "type": "object",
+  "properties": {
+   "accepted": {
+    "type": "boolean"
+   },
+   "delivery": {
+    "type": "string",
+    "enum": [
+     "steer",
+     "queue",
+     "interrupt",
+     "answer"
+    ]
+   },
+   "child_state": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/child_state.json"
+   },
+   "held": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "accepted",
+   "child_state"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/stop_agent_args.json",
+  "type": "object",
+  "properties": {
+   "child_session_id": {
+    "type": "string"
+   },
+   "mode": {
+    "type": "string",
+    "enum": [
+     "graceful",
+     "kill"
+    ]
+   },
+   "reason": {
+    "type": "string",
+    "maxLength": 512
+   },
+   "timeout_s": {
+    "type": "integer",
+    "minimum": 1
+   }
+  },
+  "required": [
+   "child_session_id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/stop_agent_result.json",
+  "type": "object",
+  "properties": {
+   "state": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/child_state.json"
+   },
+   "result": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/child_result.json"
+   }
+  },
+  "required": [
+   "state"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/wait_agent_args.json",
+  "type": "object",
+  "properties": {
+   "child_session_id": {
+    "type": "string"
+   },
+   "until": {
+    "type": "string",
+    "enum": [
+     "idle",
+     "finished"
+    ]
+   },
+   "timeout_s": {
+    "type": "integer",
+    "minimum": 1
+   }
+  },
+  "required": [
+   "child_session_id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/wait_agent_result.json",
+  "type": "object",
+  "properties": {
+   "state": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/child_state.json"
+   },
+   "timed_out": {
+    "type": "boolean"
+   },
+   "result": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/child_result.json"
+   }
+  },
+  "required": [
+   "state",
+   "timed_out"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/list_agents_args.json",
+  "type": "object",
+  "properties": {
+   "state": {
+    "type": "array",
+    "items": {
+     "$ref": "https://raep.vyde.dev/v1/payloads/child_state.json"
+    }
+   },
+   "cursor": {
+    "type": "string"
+   },
+   "limit": {
+    "type": "integer",
+    "minimum": 1,
+    "maximum": 100
+   }
+  }
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/list_agents_result.json",
+  "type": "object",
+  "properties": {
+   "children": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "properties": {
+      "child_session_id": {
+       "type": "string"
+      },
+      "agent_id": {
+       "type": "string"
+      },
+      "name": {
+       "type": "string"
+      },
+      "state": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/child_state.json"
+      },
+      "task_summary": {
+       "type": "string",
+       "maxLength": 512
+      },
+      "depth": {
+       "type": "integer",
+       "minimum": 1
+      },
+      "activity": {
+       "type": "string",
+       "maxLength": 512
+      },
+      "usage": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/usage.json"
+      }
+     },
+     "required": [
+      "child_session_id",
+      "agent_id",
+      "state"
+     ]
+    }
+   },
+   "next_cursor": {
+    "type": [
+     "string",
+     "null"
+    ]
+   }
+  },
+  "required": [
+   "children"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/approve_child_call_args.json",
+  "type": "object",
+  "properties": {
+   "child_session_id": {
+    "type": "string"
+   },
+   "tool_call_id": {
+    "type": "string"
+   },
+   "decision": {
+    "type": "string",
+    "enum": [
+     "approve",
+     "deny"
+    ]
+   },
+   "reason": {
+    "type": "string",
+    "maxLength": 512
+   }
+  },
+  "required": [
+   "child_session_id",
+   "tool_call_id",
+   "decision"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/ask_delegator_args.json",
+  "type": "object",
+  "properties": {
+   "question": {
+    "type": "string",
+    "minLength": 1,
+    "maxLength": 4096
+   },
+   "options": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    },
+    "maxItems": 10
+   },
+   "timeout_s": {
+    "type": "integer",
+    "minimum": 1
+   }
+  },
+  "required": [
+   "question"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/ask_delegator_result.json",
+  "type": "object",
+  "properties": {
+   "answered": {
+    "type": "boolean"
+   },
+   "answer": {
+    "type": "string"
+   },
+   "answered_by": {
+    "type": "string",
+    "enum": [
+     "parent",
+     "user"
+    ]
+   },
+   "timed_out": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "answered"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/tool_error.json",
+  "type": "object",
+  "properties": {
+   "code": {
+    "type": "string",
+    "enum": [
+     "TOOL_ERROR",
+     "TOOL_DENIED",
+     "SCOPE_DENIED",
+     "BUDGET_EXCEEDED",
+     "SANDBOX_LIMIT_EXCEEDED",
+     "AGENT_NOT_FOUND",
+     "HANDOFF_NOT_ALLOWED",
+     "DELEGATE_NOT_ALLOWED",
+     "CHILD_NOT_FOUND",
+     "CHILD_NOT_ACTIVE",
+     "DELEGATOR_SUSPENDED",
+     "OUTPUT_SCHEMA_INVALID",
+     "APPROVAL_TIMEOUT",
+     "APPROVAL_NOT_PENDING",
+     "RISK_TOO_HIGH",
+     "DELEGATOR_TIMEOUT",
+     "INVALID_ARGUMENT",
+     "TOOL_TIMEOUT",
+     "TOOL_INTERRUPTED",
+     "REMOTE_UNAVAILABLE"
+    ]
+   },
+   "message": {
+    "type": "string"
+   },
+   "details": {
+    "type": "object"
+   }
+  },
+  "required": [
+   "code",
+   "message"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/handoff_agent_args.json",
+  "type": "object",
+  "properties": {
+   "agent_id": {
+    "type": "string",
+    "minLength": 1
+   },
+   "reason": {
+    "type": "string",
+    "maxLength": 512
+   },
+   "carry_context": {
+    "type": "string",
+    "enum": [
+     "full",
+     "summary",
+     "none"
+    ]
+   }
+  },
+  "required": [
+   "agent_id"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/handoff_agent_result.json",
+  "type": "object",
+  "properties": {
+   "accepted": {
+    "type": "boolean"
+   },
+   "takes_effect": {
+    "const": "turn_end"
+   }
+  },
+  "required": [
+   "accepted"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/notify_config.json",
+  "type": "object",
+  "properties": {
+   "channel": {
+    "type": "string",
+    "enum": [
+     "webhook"
+    ]
+   },
+   "endpoint_id": {
+    "type": "string"
+   },
+   "url": {
+    "type": "string",
+    "pattern": "^https://"
+   },
+   "secret": {
+    "type": "string",
+    "minLength": 32
+   },
+   "events": {
+    "type": "array",
+    "items": {
+     "type": "string",
+     "enum": [
+      "TURN_STATE_CHANGED",
+      "JOB_FINISHED",
+      "TOOL_APPROVAL_REQUEST",
+      "CHILD_SESSION_UPDATED",
+      "BUDGET_WARNING",
+      "SESSION_CLOSED",
+      "ERROR"
+     ]
+    },
+    "minItems": 1
+   },
+   "when": {
+    "type": "string",
+    "enum": [
+     "detached",
+     "always"
+    ]
+   },
+   "include": {
+    "type": "string",
+    "enum": [
+     "none",
+     "summary"
+    ]
+   },
+   "include_children": {
+    "type": "boolean"
+   },
+   "coalesce_s": {
+    "type": "integer",
+    "minimum": 0,
+    "maximum": 3600
+   }
+  },
+  "required": [
+   "channel",
+   "events"
+  ],
+  "oneOf": [
+   {
+    "required": [
+     "endpoint_id"
+    ]
+   },
+   {
+    "required": [
+     "url"
+    ]
+   }
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/NOTIFICATION_STATUS.json",
+  "type": "object",
+  "properties": {
+   "notify_state": {
+    "type": "string",
+    "enum": [
+     "active",
+     "failing",
+     "disabled"
+    ]
+   },
+   "consecutive_failures": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "last_error": {
+    "type": "string",
+    "maxLength": 256
+   },
+   "last_attempt_at": {
+    "type": "integer"
+   },
+   "undelivered": {
+    "type": "integer",
+    "minimum": 0
+   }
+  },
+  "required": [
+   "notify_state"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/webhook_body.json",
+  "type": "object",
+  "properties": {
+   "notification_id": {
+    "type": "string"
+   },
+   "session_id": {
+    "type": "string"
+   },
+   "root_session_id": {
+    "type": "string"
+   },
+   "seq": {
+    "type": "integer",
+    "minimum": 1
+   },
+   "type": {
+    "type": "string"
+   },
+   "turn_id": {
+    "type": [
+     "string",
+     "null"
+    ]
+   },
+   "job_id": {
+    "type": [
+     "string",
+     "null"
+    ]
+   },
+   "child_session_id": {
+    "type": [
+     "string",
+     "null"
+    ]
+   },
+   "occurred_at": {
+    "type": "integer"
+   },
+   "summary": {
+    "type": "string",
+    "maxLength": 256
+   },
+   "attempt": {
+    "type": "integer",
+    "minimum": 1
+   }
+  },
+  "required": [
+   "notification_id",
+   "session_id",
+   "root_session_id",
+   "seq",
+   "type",
+   "occurred_at"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/OUTPUT_PART_STARTED.json",
+  "type": "object",
+  "properties": {
+   "part_id": {
+    "type": "string"
+   },
+   "index": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "type": {
+    "type": "string",
+    "enum": [
+     "image",
+     "audio",
+     "video",
+     "document"
+    ]
+   },
+   "mime_type": {
+    "type": "string"
+   },
+   "name": {
+    "type": "string"
+   },
+   "alt": {
+    "type": "string"
+   },
+   "duration_ms": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "width": {
+    "type": "integer",
+    "minimum": 1
+   },
+   "height": {
+    "type": "integer",
+    "minimum": 1
+   },
+   "bytes_expected": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "streamed": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "part_id",
+   "index",
+   "type",
+   "mime_type",
+   "streamed"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/OUTPUT_PART_DELTA.json",
+  "type": "object",
+  "properties": {
+   "part_id": {
+    "type": "string"
+   },
+   "index": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "data": {
+    "type": "string"
+   }
+  },
+  "required": [
+   "part_id",
+   "index",
+   "data"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/OUTPUT_PART_FINISHED.json",
+  "type": "object",
+  "properties": {
+   "part_id": {
+    "type": "string"
+   },
+   "status": {
+    "type": "string",
+    "enum": [
+     "OK",
+     "ERROR",
+     "CANCELLED"
+    ]
+   },
+   "source": {
+    "type": "object",
+    "properties": {
+     "kind": {
+      "type": "string",
+      "enum": [
+       "output",
+       "url"
+      ]
+     },
+     "output_id": {
+      "type": "string"
+     },
+     "url": {
+      "type": "string"
+     },
+     "expires_at": {
+      "type": "integer"
+     }
+    },
+    "required": [
+     "kind"
+    ]
+   },
+   "bytes": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "sha256": {
+    "type": "string",
+    "pattern": "^[0-9a-f]{64}$"
+   },
+   "transcript": {
+    "type": "string"
+   },
+   "error": {
+    "$ref": "https://raep.vyde.dev/v1/payloads/error_payload.json"
+   }
+  },
+  "required": [
+   "part_id",
+   "status"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/SESSION_EXPORT.json",
+  "type": "object",
+  "properties": {
+   "include": {
+    "type": "object",
+    "properties": {
+     "children": {
+      "type": "boolean"
+     },
+     "uploads": {
+      "type": "boolean"
+     },
+     "job_output": {
+      "type": "boolean"
+     },
+     "outputs": {
+      "type": "boolean"
+     },
+     "workspace": {
+      "type": "boolean"
+     }
+    }
+   },
+   "quiesce": {
+    "type": "string",
+    "enum": [
+     "reject",
+     "wait",
+     "kill_jobs"
+    ]
+   },
+   "wait_timeout_s": {
+    "type": "integer",
+    "minimum": 1
+   },
+   "encrypt": {
+    "type": "object",
+    "properties": {
+     "recipient_jwk": {
+      "type": "object"
+     }
+    },
+    "required": [
+     "recipient_jwk"
+    ]
+   }
+  }
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/SESSION_EXPORT_READY.json",
+  "type": "object",
+  "properties": {
+   "export_id": {
+    "type": "string"
+   },
+   "download_url": {
+    "type": "string"
+   },
+   "bytes": {
+    "type": "integer",
+    "minimum": 0
+   },
+   "sha256": {
+    "type": "string",
+    "pattern": "^[0-9a-f]{64}$"
+   },
+   "expires_at": {
+    "type": "integer"
+   },
+   "sessions": {
+    "type": "integer",
+    "minimum": 1
+   },
+   "encrypted": {
+    "type": "boolean"
+   },
+   "signed": {
+    "type": "boolean"
+   }
+  },
+  "required": [
+   "export_id",
+   "download_url",
+   "bytes",
+   "sha256",
+   "expires_at"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/bundle_manifest.json",
+  "type": "object",
+  "properties": {
+   "bundle_version": {
+    "const": "1"
+   },
+   "raep_document_version": {
+    "type": "string"
+   },
+   "wire_version": {
+    "type": "string"
+   },
+   "exported_at": {
+    "type": "integer"
+   },
+   "exporter": {
+    "type": "object",
+    "properties": {
+     "server": {
+      "type": "string"
+     },
+     "kid": {
+      "type": "string"
+     }
+    }
+   },
+   "root_session_id": {
+    "type": "string"
+   },
+   "sessions": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "properties": {
+      "session_id": {
+       "type": "string"
+      },
+      "parent_session_id": {
+       "type": [
+        "string",
+        "null"
+       ]
+      },
+      "agent": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/agent_ref.json"
+      },
+      "state": {
+       "type": "string"
+      },
+      "history_file": {
+       "type": "string"
+      },
+      "last_seq": {
+       "type": "integer",
+       "minimum": 0
+      },
+      "usage_total": {
+       "$ref": "https://raep.vyde.dev/v1/payloads/usage.json"
+      }
+     },
+     "required": [
+      "session_id",
+      "parent_session_id",
+      "agent",
+      "history_file"
+     ]
+    },
+    "minItems": 1
+   },
+   "files": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "properties": {
+      "path": {
+       "type": "string"
+      },
+      "sha256": {
+       "type": "string",
+       "pattern": "^[0-9a-f]{64}$"
+      },
+      "bytes": {
+       "type": "integer",
+       "minimum": 0
+      }
+     },
+     "required": [
+      "path",
+      "sha256",
+      "bytes"
+     ]
+    }
+   },
+   "excluded": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   }
+  },
+  "required": [
+   "bundle_version",
+   "exported_at",
+   "root_session_id",
+   "sessions",
+   "files"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/import_report.json",
+  "type": "object",
+  "properties": {
+   "import_id": {
+    "type": "string"
+   },
+   "bundle_version": {
+    "type": "string"
+   },
+   "sessions": {
+    "type": "integer",
+    "minimum": 1
+   },
+   "signature": {
+    "type": "string",
+    "enum": [
+     "valid",
+     "invalid",
+     "absent",
+     "untrusted"
+    ]
+   },
+   "agents": {
+    "type": "array",
+    "items": {
+     "type": "object",
+     "properties": {
+      "agent_id": {
+       "type": "string"
+      },
+      "version": {
+       "type": "string"
+      },
+      "available": {
+       "type": "boolean"
+      }
+     },
+     "required": [
+      "agent_id",
+      "available"
+     ]
+    }
+   },
+   "warnings": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   },
+   "expires_at": {
+    "type": "integer"
+   }
+  },
+  "required": [
+   "import_id",
+   "signature",
+   "agents"
+  ]
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/import_commit_request.json",
+  "type": "object",
+  "properties": {
+   "agent_map": {
+    "type": "object",
+    "additionalProperties": {
+     "type": "string"
+    }
+   },
+   "carry_usage": {
+    "type": "boolean"
+   },
+   "decryption_jwk": {
+    "type": "object"
+   }
+  }
+ },
+ {
+  "$id": "https://raep.vyde.dev/v1/payloads/import_result.json",
+  "type": "object",
+  "properties": {
+   "session_id": {
+    "type": "string"
+   },
+   "id_map": {
+    "type": "object",
+    "properties": {
+     "sessions": {
+      "type": "object",
+      "additionalProperties": {
+       "type": "string"
+      }
+     },
+     "uploads": {
+      "type": "object",
+      "additionalProperties": {
+       "type": "string"
+      }
+     },
+     "outputs": {
+      "type": "object",
+      "additionalProperties": {
+       "type": "string"
+      }
+     }
+    }
+   },
+   "state": {
+    "type": "string",
+    "enum": [
+     "SUSPENDED"
+    ]
+   },
+   "warnings": {
+    "type": "array",
+    "items": {
+     "type": "string"
+    }
+   }
+  },
+  "required": [
+   "session_id",
+   "id_map"
+  ]
+ }
+]

@@ -1,0 +1,10 @@
+[package]
+name = "raep-core"
+description = "Transport-independent RAEP delivery and idempotency primitives."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+thiserror.workspace = true

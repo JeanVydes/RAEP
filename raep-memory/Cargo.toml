@@ -1,0 +1,16 @@
+[package]
+name = "raep-memory"
+description = "In-memory RAEP adapters for tests and local development."
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+version.workspace = true
+
+[dependencies]
+raep-domain = { path = "../raep-domain" }
+raep-ports = { path = "../raep-ports" }
+raep-types = { path = "../raep-types" }
+thiserror.workspace = true
+
+[dev-dependencies]
+futures-lite = "2"
