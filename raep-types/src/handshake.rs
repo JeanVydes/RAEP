@@ -210,6 +210,10 @@ pub enum QueuePolicy {
     Queue,
     /// Cancel the current turn before accepting the input.
     Interrupt,
+    /// Reach the request already in flight: the running turn keeps going and
+    /// the input joins it before its next provider request. When no turn is
+    /// running, the input starts one, like every other policy.
+    Steer,
 }
 
 /// Core session states exposed in `SESSION_STATE`.

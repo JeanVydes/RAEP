@@ -1,6 +1,6 @@
 use raep_types::{
-    Ack, Envelope, FrameType, PayloadError, StandardFrameType, ToolDescriptor, TurnState,
-    TurnStateChanged, Usage, UserInput, WIRE_VERSION,
+    Ack, Envelope, FrameType, PayloadError, QueuePolicy, StandardFrameType, ToolDescriptor,
+    TurnState, TurnStateChanged, Usage, UserInput, WIRE_VERSION,
 };
 use serde_json::json;
 
@@ -79,4 +79,14 @@ fn usage_and_tool_descriptor_are_wire_compatible() {
     .unwrap();
     assert_eq!(tool["name"], "read_file");
     assert_eq!(tool["input_schema"]["type"], "object");
+}
+
+#[test]
+fn queue_policy_accepts_steer_and_round_trips() {
+    let steer: QueuePolicy = serde_json::from_str("\"steer\"").expect("steer decodes");
+    assert_eq!(steer, QueuePolicy::Steer);
+    assert_eq!(
+        serde_json::to_string(&steer).expect("steer encodes"),
+        "\"steer\""
+    );
 }
